@@ -1,0 +1,23 @@
+{
+  "name": "ncee",
+  "description": "",
+  "main": "server.js",
+  "authors": [
+    "Liangck"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "vue": "^2.3.4",
+    "jquery": "^3.2.1",
+    "datatables": "^1.10.15"
+  }
+}

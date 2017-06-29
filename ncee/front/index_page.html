@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>高考咨询系统</title>
+    <link rel="stylesheet" href="dist/bootstrap/dist/css/bootstrap.min.css">
+    <!--<link rel="stylesheet" href="dist/datatables/media/css/dataTables.bootstrap.min.css">-->
+    <link rel="stylesheet" href="stylesheet/index.css">
+</head>
+<body>
+<div id="app" class="container text-center">
+    <!--<img src="https://vuejs.org/images/logo.png" alt="Vue logo">-->
+    <h1 v-text="greeting"></h1>
+    <section>
+        <div id="ncee-select" class="col-lg-12">
+            <form class="col-lg-12">
+                <div id="ncee-preferences" class="col-lg-12 left">
+                    <div class="form-group">专业偏好选择：</div>
+                    <div class="form-group">
+                        <label for="nceePreference1">专业偏好1</label>
+                        <input type="text" class="form-control" id="nceePreference1"
+                               v-model="selectRange.preferences.preference1" placeholder="请输入...">
+                    </div>
+                    <div class="form-group">
+                        <label for="nceePreference2">专业偏好2</label>
+                        <input type="text" class="form-control" id="nceePreference2"
+                               v-model="selectRange.preferences.preference2" placeholder="请输入...">
+                    </div>
+                    <div class="form-group">
+                        <label for="nceePreference3">专业偏好3</label>
+                        <input type="text" class="form-control" id="nceePreference3"
+                               v-model="selectRange.preferences.preference3" placeholder="请输入...">
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="col-lg-2"></div>
+                    <div id="ncee-ranking" class="col-lg-3 left">
+                        <div class="form-group">名次号：</div>
+                        <div class="form-group">
+                            <label for="nceePreference3" class="sr-only">名次号</label>
+                            <input type="text" class="form-control" id="nceeRanking"
+                                   v-model="selectRange.rankingNum" placeholder="请输入...">
+                        </div>
+                    </div>
+                    <div id="ncee-range" class="col-lg-3 left">
+                        浮动区域：
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="optionsRadios" id="optionsRadios1" value="500"
+                                       v-model="selectRange.floatRange">
+                                500
+                            </label>
+                        </div>
+                        <div class="radio" v-model="selectRange.floatRange">
+                            <label>
+                                <input type="radio" name="optionsRadios" id="optionsRadios2" value="1000"
+                                       v-model="selectRange.floatRange">
+                                1000
+                            </label>
+                        </div>
+                        <div class="radio" v-model="selectRange.floatRange">
+                            <label>
+                                <input type="radio" name="optionsRadios" id="optionsRadios3" value="1500"
+                                       v-model="selectRange.floatRange">
+                                1500
+                            </label>
+                        </div>
+                    </div>
+                    <button type="button" class="col-lg-2 btn btn-default" @click="postSelectRange()">查询</button>
+                    <div class="col-lg-2"></div>
+                </div>
+            </form>
+        </div>
+    </section>
+    <section>
+        <div id="ncee-output" class="col-lg-12">
+            <div id="ncee-resultList" class="col-lg-6">
+                <button class="col-lg-12 btn btn-default"
+                        @click="downloadResultTable">下载表格</button>
+                <table id="resultListTable" class="table" style="margin-bottom: 0">
+                    <thead>
+                    <tr>
+                        <th class="col-lg-2">#</th>
+                        <th class="col-lg-3">学校</th>
+                        <th class="col-lg-3">专业</th>
+                        <th class="col-lg-2">上移/下移</th>
+                        <th class="col-lg-2">是否选择</th>
+                    </tr>
+                    </thead>
+                </table>
+                <table class="table" style="display: inline-block">
+                    <tbody style="display:block; height: 600px;overflow: auto;">
+                    <tr v-for="(item, index) in results">
+                        <td class="col-lg-2" v-text="index"></td>
+                        <td class="col-lg-3" v-text="item.schoolName"></td>
+                        <td class="col-lg-3" v-text="item.professionName"></td>
+                        <td class="col-lg-2">
+                            <span class="glyphicon glyphicon-arrow-up btn btn-default"
+                                  @click="upResultList(index)" aria-hidden="true" :disabled="index === 0"></span>
+                            <span class="glyphicon glyphicon-arrow-down btn btn-default"
+                                  @click="downResultList(index)" aria-hidden="true" :disabled="index === (results.length-1)"></span>
+                            <!--<span class="glyphicon glyphicon-collapse-up btn btn-default" aria-hidden="true"></span>-->
+                        </td>
+                        <td class="col-lg-2">
+                            <div class="checkbox">
+                                <label><input type="checkbox" @change="deleteCheckedCandidate(index, item)"
+                                              v-model=item.checked></label>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="ncee-candidates" class="col-lg-6">
+                <label>
+                    <input type="text" class="form-control" placeholder="输入筛选字" v-model="searchText">
+                    {{searchText}}
+                </label>
+                <table class="table" style="margin-bottom: 0">
+                    <thead>
+                    <tr>
+                        <th class="col-lg-2">#</th>
+                        <th class="col-lg-4">学校</th>
+                        <th class="col-lg-4">专业</th>
+                        <th class="col-lg-2">是否选择</th>
+                    </tr>
+                    </thead>
+                </table>
+                <table class="table" style="display: inline-block;">
+                    <tbody style="display:block; height: 600px;overflow: auto;">
+                    <tr v-for="(item, index) in filterCandidates">
+                        <td class="col-lg-2" v-text="index"></td>
+                        <td class="col-lg-4" v-text="item.schoolName"></td>
+                        <td class="col-lg-4" v-text="item.professionName"></td>
+                        <td class="col-lg-2">
+                            <div class="checkbox">
+                                <label><input type="checkbox" @change="checkCandidate(item)"
+                                              v-model=item.checked></label>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+</div>
+<script src="dist/jquery/dist/jquery.min.js"></script>
+<script src="dist/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="dist/vue/dist/vue.min.js"></script>
+<!--<script src="dist/datatables/media/js/dataTables.bootstrap.min.js"></script>-->
+<script src="javascript/index.js"></script>
+</body>
+</html>

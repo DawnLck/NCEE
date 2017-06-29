@@ -1,0 +1,44 @@
+.container {
+    width: 1500px;
+}
+
+th {
+    text-align: center;
+}
+
+#ncee-preferences .form-group {
+    display: inline-block;
+}
+
+#ncee-ranking .form-group {
+    display: inline-block;
+}
+
+#ncee-range .radio {
+    display: inline-block;
+}
+
+.table > tbody > tr > td {
+    vertical-align: middle;
+    height: 60px;
+    padding-top: 20px;
+    /*line-height: 3;*/
+}
+
+.table .checkbox {
+    margin: 0;
+}
+
+.table .btn {
+    top: -8px;
+}
+
+.table > tbody > tr {
+    display: flex;
+}
+#ncee-login{
+    width: 50%;
+    display: inline-block;
+    text-align: -webkit-left;
+    margin-top: 20px;
+}
