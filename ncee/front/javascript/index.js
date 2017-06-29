@@ -8,12 +8,13 @@ var app = new Vue({
         },
         selectRange: {
             preferences: {
-                preference1: '软件工程',
+                preference1: '计算机',
                 preference2: '信息安全',
                 preference3: '网络工程'
             },
-            rankingNum: 10000,
-            floatRange: 500
+            ranking: 10000,
+            score: 600,
+            floatRange: 2000
         }, //选择范围
         candidates: [],      //候选表
         results: [],           //模板表
@@ -43,19 +44,49 @@ var app = new Vue({
             $.post('/userLogin', this.userInfo, function (data) {
                 // window.location.href = '/index';
                 console.log('Login...ok');
-                if(data.permission){
+                if (data.permission) {
                     window.location.href = '/index';
                 }
             }, 'json');
         },
         postSelectRange: function () {
+            if(this.selectRange.score < 359){
+                window.alert('所选最低分不能低于359分！');
+            }
             console.log('Post selected data...');
-            $.post('/getCandidates', this.selectRange, function (data) {
-                console.log(data);
+            var params = {};
+            $.extend(true, params, app.$data.selectRange);
+            params.score += 30;
+            console.log(params);
+            $.post('/getCandidates', params, function (data) {
+                console.log(data[0].dataClass);
                 for (var i = 0; i < data.length; i++) {
                     data[i].checked = false;
+                    data[i].class = 'part_1';
                 }
                 app.$data.candidates = data.slice(0);
+                console.log(app.$data.candidates);
+                console.log('Post selected data...ok');
+            }, 'json');
+            params.score -= 30;
+            $.post('/getCandidates', params, function (data) {
+                console.log(data[0].dataClass);
+                for (var i = 0; i < data.length; i++) {
+                    data[i].checked = false;
+                    data[i].class = 'part_2';
+                }
+                app.$data.candidates.push.apply(app.$data.candidates, data.slice(0));
+                console.log(app.$data.candidates);
+                console.log('Post selected data...ok');
+            }, 'json');
+            params.score -= 30;
+            $.post('/getCandidates', params, function (data) {
+                console.log(data[0].dataClass);
+                for (var i = 0; i < data.length; i++) {
+                    data[i].checked = false;
+                    data[i].class = 'part_3';
+                }
+                app.$data.candidates.push.apply(app.$data.candidates, data.slice(0));
                 console.log(app.$data.candidates);
                 console.log('Post selected data...ok');
             }, 'json');

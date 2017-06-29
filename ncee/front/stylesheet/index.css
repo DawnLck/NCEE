@@ -14,10 +14,23 @@ th {
     display: inline-block;
 }
 
+#ncee-score .form-group {
+    display: inline-block;
+}
+
 #ncee-range .radio {
     display: inline-block;
 }
 
+#ncee-candidates .part_1{
+    background-color: #C6EDEA;
+}
+#ncee-candidates .part_2{
+    background-color: #B0D9EF;
+}
+#ncee-candidates .part_3{
+    background-color: #5CA7BC;
+}
 .table > tbody > tr > td {
     vertical-align: middle;
     height: 60px;
@@ -41,4 +54,11 @@ th {
     display: inline-block;
     text-align: -webkit-left;
     margin-top: 20px;
+}
+.ncee-class-h1{
+    color: #fff;
+    background-color: #597cd1;
+}
+.ncee-class-h1, h1{
+    margin: 10px 0;
 }

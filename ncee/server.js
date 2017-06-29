@@ -6,7 +6,7 @@ var mongoInit = require('./backend/init/mongoInit');
 
 var app = express();
 app.use(express.static('front'));
-app.use(express.static('front/dist'));
+// app.use(express.static('front/dist'));
 
 app.get('/', function (req, res) {
     // res.sendFile('./front/login.html');
@@ -19,8 +19,23 @@ app.post('/getCandidates', urlencodedParser, function (req, res) {
     if (!req.body) {
         return res.sendStatus(400);
     }
-    mongoInit.getCandidates(req.body.preferences, parseInt(req.body.rankingNum), parseInt(req.body.floatRange), function (data) {
+    var preferences = {
+        preference1: req.body['preferences[preference1]'],
+        preference2: req.body['preferences[preference2]'],
+        preference3: req.body['preferences[preference3]']
+    };
+    // var results = [];
+    // console.log(preferences);
+    mongoInit.getCandidates(preferences, parseInt(req.body.score), parseInt(req.body.floatRange), function (data) {
         console.log(data.length);
+        // var part1 = data.slice(0);
+        // for (var index in part1) {
+        //     part1[index].dataClass = 'range_1';
+        //     console.log(part1[index].dataClass);
+        // }
+        // // console.log(part1[0].dataClass);
+        // results.push.apply(results, part1);
+        // console.log(data[0]);
         res.send(data);
     });
     console.log('Get new web page item....');
@@ -49,17 +64,20 @@ app.post('/userLogin', urlencodedParser, function (req, res) {
 var server = app.listen(3000, function () {
     var host = server.address().address;
     var port = server.address().port;
-
+    //
     console.log('Example app listening at http://%s:%s', host, port);
 });
 
 var dbMake = function () {
-    mongoInit.readSchoolsExcel('plan.xlsx', 'schools', function (data) {
-        console.log(data);
-    });
-    mongoInit.readAdmissionExcel('test.xlsx', 'admissions', function (data) {
-        console.log(data);
-    })
+    // mongoInit.readScore2RankExcel('backend/data/score2rank.xlsx', 'score2ranks', function (data) {
+    //     console.log(data);
+    // });
+    // mongoInit.readSchoolsExcel('backend/data/schools.xlsx', 'schools', function (data) {
+    //     console.log(data);
+    // });
+    // mongoInit.readAdmissionExcel('test.xlsx', 'admissions', function (data) {
+    //     console.log(data);
+    // });
 };
 
 var init = function () {
@@ -67,20 +85,4 @@ var init = function () {
 };
 init();
 
-console.log("liangck");
-
-// var data = [];
-// for(var i in excelObj){
-//     var arr=[];
-//     var value=excelObj[i];
-//     for(var j in value){
-//         arr.push(value[j]);
-//     }
-//     data.push(arr);
-// }
-// var buffer = xlsx.build([
-//     {
-//         name:'sheet1',
-//         data:data
-//     }
-// ]);
+// console.log("liangck");
