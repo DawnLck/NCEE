@@ -4,9 +4,9 @@ var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({extended: false});
 var mongoInit = require('./backend/init/mongoInit');
 
-var __dirname = 'D:/Project/NCEE';
 var app = express();
 app.use(express.static('front'));
+app.use(express.static('front/dist'));
 
 app.get('/', function (req, res) {
     // res.sendFile('./front/login.html');
@@ -67,6 +67,7 @@ var init = function () {
 };
 init();
 
+console.log("liangck");
 
 // var data = [];
 // for(var i in excelObj){
