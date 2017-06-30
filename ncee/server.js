@@ -78,10 +78,13 @@ var dbMake = function () {
     // mongoInit.readAdmissionExcel('test.xlsx', 'admissions', function (data) {
     //     console.log(data);
     // });
+    // mongoInit.readPlans2017('backend/data/plans_2017.xlsx', 'plans_2017', function (data) {
+    //     console.log(data);
+    // });
 };
 
 var init = function () {
-    // dbMake();
+    dbMake();
 };
 init();
 

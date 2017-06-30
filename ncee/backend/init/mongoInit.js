@@ -77,5 +77,15 @@ exports.getCandidates = function (preferences, score, floatRange, callback) {
     });
 };
 
+
+exports.readPlans2017 = function (xlsxName, collName, callback) {
+    var obj = xlsx.parse(xlsxName);
+    var data = obj[0].data;
+    console.log('Get plans 2017: ' + data.length + ' ' + data[0].length);
+    data.splice(0, 1);
+    mongoModel.savePlans2017(data, collName, function (data) {
+        callback(data);
+    });
+};
 //读取文件内容
 exports.saveSchoolArray = mongoModel.saveSchoolArray;

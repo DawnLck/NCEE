@@ -67,6 +67,48 @@ var score2rankSchema = new Schema({
    versionKey: false
 });
 
+/* 2017年计划表模式 */
+var plans2017Schema = new Schema({
+    // itemIndex: Number, /* 序号 */
+    schoolCode: String, /* 院校代码 */
+    schoolName: String, /* 院校名称 */
+    schoolCategoryCode: String, /* 院校类别代码 */
+    schoolCategory: String, /* 院校类别（专科或者是本科）*/
+
+    // professionId: Number,
+    professionCode: String, /* 专业代码 */
+    professionName: String, /* 专业名称 */
+    professionYear: String, /* 专业学年 */
+    professionCost: String, /* 专业学费（每年） */
+    professionIntro: String, /* 专业介绍 */
+
+    subjectsCode: String, /* 需修科目代码 */
+    subjects: String, /* 需修科目 */
+
+    plansNum: String, /* 计划数 */
+
+    IsNormal: String, /* 是否师范类学校 */
+    city: String, /* 城市 */
+    Is985: String, /* 是否是985 */
+    Is211: String, /* 是否是211 */
+    province: String, /* 省份 */
+    IsPrivate: String, /* 是否是民办学校 */
+
+    schoolIndex: String /* 院校名次号 */
+
+    // professionMainClass: String, /* 专业大类 */
+    // professionCategory: String, /* 专业科类 */
+    // professionSubjects: String, /* 专业需修科目 */
+    // schoolLevel: Number, /* 学校层次 */
+    // originalBatch: String, /* 原批次 */
+    // admissionCount: Number, /* 录取人数 */
+    // averageScore: Number, /* 平均分 */
+    // lowestScore: Number, /* 最低分 */
+    // rankingNumber: Number /* 名次号 */
+},{
+    versionKey: false
+});
+
 
 exports.saveAdmissionArray = function (arr, collName, callback) {
     if (arr.length) {
@@ -210,6 +252,67 @@ exports.saveScore2Rank = function (arr, collName, callback) {
     } else {
     }
 };
+
+exports.savePlans2017 = function (arr, collName, callback) {
+    if (arr.length) {
+
+        var arrLength = arr.length;
+        var targetModel = mongoose.model(collName, plans2017Schema, collName);
+
+        console.log('CollName:' + collName + ' ArrayLength: ' + arrLength);
+
+        targetModel.remove({}, function (err) {
+            if (err) {
+                console.log(err);
+            }
+        });
+
+        // console.log(arr[0]);
+        for (var i = 0; i < arrLength; i++) {
+            var item = {
+                // itemIndex: Number, /* 序号 */
+                schoolCode: arr[i][0], /* 院校代码 */
+                schoolName: arr[i][1], /* 院校名称 */
+                schoolCategoryCode: arr[i][2], /* 院校类别代码 */
+                schoolCategory: arr[i][3], /* 院校类别（专科或者是本科）*/
+
+                // professionId: Number,
+                professionCode: arr[i][4], /* 专业代码 */
+                professionName: arr[i][5], /* 专业名称 */
+                professionYear: arr[i][6], /* 专业学年 */
+                professionCost: arr[i][7], /* 专业学费（每年） */
+                professionIntro: arr[i][8], /* 专业介绍 */
+
+                subjectsCode: arr[i][9], /* 需修科目代码 */
+                subjects: arr[i][10], /* 需修科目 */
+
+                plansNum: arr[i][11], /* 计划数 */
+
+                IsNormal: arr[i][12], /* 是否师范类学校 */
+                city: arr[i][13], /* 城市 */
+                Is985: arr[i][14], /* 是否是985 */
+                Is211: arr[i][15], /* 是否是211 */
+                province: arr[i][16], /* 省份 */
+                IsPrivate: arr[i][17], /* 是否是民办学校 */
+
+                schoolIndex: arr[i][18] /* 院校名次号 */
+            };
+            // console.log(item);
+            // console.log('Processing ' + i + '/' + arrLength);
+            new targetModel(item).save(function (index, err) {
+                if (err) {
+                    console.log(index + '/' + arrLength + ' 存入失败.');
+                    return err;
+                } else {
+                    // console.log(i + '/' + arrLength + ' 存入成功.');
+                }
+            }(i));
+        }
+        callback('Save Data ' + collName + ' Array Success');
+    } else {
+    }
+};
+
 
 exports.getAdmissionData = function (query, collName, callback) {
     // console.log(query);
