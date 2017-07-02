@@ -81,6 +81,7 @@ var dbMake = function () {
     // mongoInit.readPlans2017('backend/data/plans_2017.xlsx', 'plans_2017', function (data) {
     //     console.log(data);
     // });
+    // mongoInit.conformDataAsync();
 };
 
 var init = function () {
