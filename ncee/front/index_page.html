@@ -18,17 +18,17 @@
                     <div class="form-group">
                         <label for="nceePreference1">专业偏好1</label>
                         <input type="text" class="form-control" id="nceePreference1"
-                               v-model="selectRange.preferences.preference1" placeholder="请输入...">
+                               v-model="selectRange.preference1" placeholder="请输入...">
                     </div>
                     <div class="form-group">
                         <label for="nceePreference2">专业偏好2</label>
                         <input type="text" class="form-control" id="nceePreference2"
-                               v-model="selectRange.preferences.preference2" placeholder="请输入...">
+                               v-model="selectRange.preference2" placeholder="请输入...">
                     </div>
                     <div class="form-group">
                         <label for="nceePreference3">专业偏好3</label>
                         <input type="text" class="form-control" id="nceePreference3"
-                               v-model="selectRange.preferences.preference3" placeholder="请输入...">
+                               v-model="selectRange.preference3" placeholder="请输入...">
                     </div>
                 </div>
                 <div class="col-lg-12">
@@ -104,15 +104,15 @@
                         </div>
                     </div>
 
-                    <button type="button" class="col-lg-2 btn btn-default" @click="postSelectRange()">查询</button>
-                    <div class="col-lg-2"></div>
+                    <button type="button" class="col-lg-2 btn btn-default" @click="manualRecommend()">人工推荐</button>
+                    <button type="button" class="col-lg-2 btn btn-default" @click="autoRecommend()">智能推荐</button>
                 </div>
             </form>
         </div>
     </section>
     <section>
         <div id="ncee-output" class="col-lg-12">
-            <div id="ncee-candidates" class="col-lg-12">
+            <div id="ncee-candidates" class="col-lg-12" v-show="!autoRe">
                 <div class="col-lg-12 ncee-class-h1"><h1>候选列表</h1></div>
                 <label>
                     <input type="text" class="form-control" placeholder="输入筛选字" v-model="searchText">
@@ -139,10 +139,10 @@
                         <td class="col-lg-2" v-text="item.schoolName"></td>
                         <td class="col-lg-3" v-text="item.professionName"></td>
 
-                        <th class="col-lg-1" v-text="item.admissionCount"></th> 
-                        <th class="col-lg-1" v-text="item.lowestScore"></th>
-                        <th class="col-lg-1" v-text="item.averageScore"></th>
-                        <th class="col-lg-1" v-text="item.rankingNumber"></th>
+                        <th class="col-lg-1" v-text="item.plansNum"></th>
+                        <th class="col-lg-1" v-text="item.pastLowestScore"></th>
+                        <th class="col-lg-1" v-text="item.pastAverageScore"></th>
+                        <th class="col-lg-1" v-text="item.pastRankingNumber"></th>
 
                         <td class="col-lg-2">
                             <div class="checkbox">
@@ -161,28 +161,44 @@
                 <table id="resultListTable" class="table" style="margin-bottom: 0">
                     <thead>
                     <tr>
-                        <th class="col-lg-2">#</th>
-                        <th class="col-lg-3">学校</th>
-                        <th class="col-lg-3">专业</th>
-                        <th class="col-lg-2">上移/下移</th>
-                        <th class="col-lg-2">是否选择</th>
+                        <th class="col-lg-1">#</th>
+                        <th class="col-lg-2">学校</th>
+                        <th class="col-lg-2">专业</th>
+                        <th class="col-lg-1">专业代码</th>
+
+                        <th class="col-lg-1">计划数</th>
+                        <th class="col-lg-1">学校层次</th>
+
+                        <th class="col-lg-1">以往批次</th>
+                        <th class="col-lg-1">以往名次</th>
+
+                        <th class="col-lg-1">上移/下移</th>
+                        <th class="col-lg-1">是否选择</th>
                     </tr>
                     </thead>
                 </table>
                 <table class="table" style="display: inline-block">
                     <tbody style="display:block; height: 600px;overflow: auto;">
-                    <tr v-for="(item, index) in results">
-                        <td class="col-lg-2" v-text="index"></td>
-                        <td class="col-lg-3" v-text="item.schoolName"></td>
-                        <td class="col-lg-3" v-text="item.professionName"></td>
-                        <td class="col-lg-2">
+                    <tr v-for="(item ,index) in results" v-bind:class="item.class">
+                        <td class="col-lg-1" v-text="(index+1)"></td>
+                        <td class="col-lg-2" v-text="item.schoolName"></td>
+                        <td class="col-lg-2" v-text="item.professionName"></td>
+                        <td class="col-lg-1" v-text="item.professionCode"></td>
+
+                        <td class="col-lg-1" v-text="item.plansNum"></td>
+                        <td class="col-lg-1" v-text="item.schoolLevel"></td>
+
+                        <td class="col-lg-1" v-text="item.pastBatch"></td>
+                        <td class="col-lg-1" v-text="parseInt(item.pastRankingNumber)"></td>
+
+                        <td class="col-lg-1">
                             <span class="glyphicon glyphicon-arrow-up btn btn-default"
                                   @click="upResultList(index)" aria-hidden="true" :disabled="index === 0"></span>
                             <span class="glyphicon glyphicon-arrow-down btn btn-default"
                                   @click="downResultList(index)" aria-hidden="true" :disabled="index === (results.length-1)"></span>
                             <!--<span class="glyphicon glyphicon-collapse-up btn btn-default" aria-hidden="true"></span>-->
                         </td>
-                        <td class="col-lg-2">
+                        <td class="col-lg-1">
                             <div class="checkbox">
                                 <label><input type="checkbox" @change="deleteCheckedCandidate(index, item)"
                                               v-model=item.checked></label>

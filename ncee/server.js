@@ -20,22 +20,13 @@ app.post('/getCandidates', urlencodedParser, function (req, res) {
         return res.sendStatus(400);
     }
     var preferences = {
-        preference1: req.body['preferences[preference1]'],
-        preference2: req.body['preferences[preference2]'],
-        preference3: req.body['preferences[preference3]']
+        preference1: req.body.preference1,
+        preference2: req.body.preference2,
+        preference3: req.body.preference3
     };
-    // var results = [];
-    // console.log(preferences);
+
     mongoInit.getCandidates(preferences, parseInt(req.body.score), parseInt(req.body.floatRange), function (data) {
         console.log(data.length);
-        // var part1 = data.slice(0);
-        // for (var index in part1) {
-        //     part1[index].dataClass = 'range_1';
-        //     console.log(part1[index].dataClass);
-        // }
-        // // console.log(part1[0].dataClass);
-        // results.push.apply(results, part1);
-        // console.log(data[0]);
         res.send(data);
     });
     console.log('Get new web page item....');
@@ -61,6 +52,29 @@ app.post('/userLogin', urlencodedParser, function (req, res) {
     console.log('Get new web page item....');
 });
 
+app.get('/getAutoRecommend', function (req, res) {
+    console.log(req.query);
+    var preferences = {
+        preference1: req.query.preference1,
+        preference2: req.query.preference2,
+        preference3: req.query.preference3
+    };
+    var score = parseInt(req.query.score);
+    if(score > 686){
+        score = 686;
+    }
+    mongoInit.getAutoRecommend(preferences, score, parseInt(req.query.floatRange), function (err, data) {
+        if(err){
+            console.log(err);
+            res.send(err);
+        }
+        else {
+            console.log('Server: get auto recommend items.');
+            res.send(data);
+        }
+    });
+});
+
 var server = app.listen(3000, function () {
     var host = server.address().address;
     var port = server.address().port;
@@ -82,6 +96,9 @@ var dbMake = function () {
     //     console.log(data);
     // });
     // mongoInit.conformDataAsync();
+    // mongoInit.readConformedData('backend/data/plans_conformed_final_2017.xlsx', 'plans_conformed_2017', function (data) {
+    //     console.log(data);
+    // });
 };
 
 var init = function () {
@@ -89,4 +106,4 @@ var init = function () {
 };
 init();
 
-// console.log("liangck");
+// console.log("liangck");ian

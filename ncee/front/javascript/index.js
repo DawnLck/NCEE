@@ -7,17 +7,18 @@ var app = new Vue({
             password: null
         },
         selectRange: {
-            preferences: {
-                preference1: '计算机',
-                preference2: '信息安全',
-                preference3: '网络工程'
-            },
+            preference1: '计算机',
+            preference2: '信息安全',
+            preference3: '网络工程',
             ranking: 10000,
             score: 600,
             floatRange: 2000
         }, //选择范围
-        candidates: [],      //候选表
-        results: [],           //模板表
+
+        autoRe: true,           //是否智能推荐
+
+        candidates: [],         //候选表
+        results: [],            //模板表
         resultUri: null,
         resultCsv: 'm_data.csv',
         searchText: null
@@ -49,48 +50,108 @@ var app = new Vue({
                 }
             }, 'json');
         },
-        postSelectRange: function () {
-            if(this.selectRange.score < 359){
+
+        clearAll: function () {
+            this.candidates = [];
+            this.results = [];
+        },
+
+        manualRecommend: function () {
+            this.clearAll();
+
+            this.autoRe = false;
+
+            if (this.selectRange.score < 359) {
                 window.alert('所选最低分不能低于359分！');
             }
-            console.log('Post selected data...');
+            // console.log('Post selected data...');
+            console.log('Manual recommend college volunteers...');
             var params = {};
             $.extend(true, params, app.$data.selectRange);
             params.score += 30;
             console.log(params);
             $.post('/getCandidates', params, function (data) {
-                console.log(data[0].dataClass);
                 for (var i = 0; i < data.length; i++) {
                     data[i].checked = false;
                     data[i].class = 'part_1';
                 }
                 app.$data.candidates = data.slice(0);
-                console.log(app.$data.candidates);
-                console.log('Post selected data...ok');
+                // console.log(app.$data.candidates);
+                console.log('Post selected data part_1 ...ok');
             }, 'json');
             params.score -= 30;
             $.post('/getCandidates', params, function (data) {
-                console.log(data[0].dataClass);
                 for (var i = 0; i < data.length; i++) {
                     data[i].checked = false;
                     data[i].class = 'part_2';
                 }
                 app.$data.candidates.push.apply(app.$data.candidates, data.slice(0));
-                console.log(app.$data.candidates);
-                console.log('Post selected data...ok');
+                // console.log(app.$data.candidates);
+                console.log('Post selected data part_2 ...ok');
             }, 'json');
             params.score -= 30;
             $.post('/getCandidates', params, function (data) {
-                console.log(data[0].dataClass);
                 for (var i = 0; i < data.length; i++) {
                     data[i].checked = false;
                     data[i].class = 'part_3';
                 }
                 app.$data.candidates.push.apply(app.$data.candidates, data.slice(0));
-                console.log(app.$data.candidates);
-                console.log('Post selected data...ok');
+                // console.log(app.$data.candidates);
+                console.log('Post selected data part_3 ...ok');
             }, 'json');
         },
+
+        autoRecommend: function () {
+            this.clearAll();
+            this.autoRe = true;
+            if (this.selectRange.score < 359) {
+                window.alert('所选最低分不能低于359分！');
+            }
+            console.log('Auto recommend college volunteers...');
+
+            var params = {};
+            $.extend(true, params, app.$data.selectRange);
+
+            function compare(property) {
+                return function (a, b) {
+                    var value1 = parseInt(a[property]);
+                    var value2 = parseInt(b[property]);
+                    return value1 - value2;
+                }
+            }
+
+            $.get('/getAutoRecommend', params, function (data) {
+                var i;
+                var x = data['firstStep'];
+                var y = data['secondStep'];
+                var z = data['thirdStep'];
+
+
+                console.log('XLength:' + x.length + '   YLength:' + y.length + '   ZLength:' + z.length);
+
+                for (i = 0; i < x.length; i++) {
+                    x[i].checked = true;
+                    x[i].class = 'preference_1'
+                }
+                for (i = 0; i < y.length; i++) {
+                    y[i].checked = true;
+                    y[i].class = 'preference_2'
+                }
+                for (i = 0; i < z.length; i++) {
+                    z[i].checked = true;
+                    z[i].class = 'preference_3'
+                }
+
+                z.push.apply(z, x.slice(0));
+                z.push.apply(z, y.slice(0));
+                z.sort(compare('pastRankingNumber'));
+
+                app.$data.results = z.slice(0);
+                // console.log(app.$data.results);
+                console.log('Post selected data...ok');
+            }, 'json')
+        },
+
         checkCandidate: function (item) {
             if (item.checked === true) {
                 // console.log(item);
@@ -123,7 +184,7 @@ var app = new Vue({
         upResultList: function (index) {
             this.results[index] = this.results.splice(index - 1, 1, this.results[index])[0];
         },
-        downResultList: function (index, item) {
+        downResultList: function (index) {
             this.results[index] = this.results.splice(index + 1, 1, this.results[index])[0];
         },
         downloadResultTable: function () {

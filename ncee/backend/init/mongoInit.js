@@ -6,6 +6,7 @@
  */
 var mongoModel = require('../lib/mongooseModel');
 var xlsx = require('node-xlsx');
+var async = require('async');
 
 exports.readSchoolsExcel = function (xlsxName, collName, callback) {
     var obj = xlsx.parse(xlsxName);
@@ -54,10 +55,18 @@ exports.readPlans2017 = function (xlsxName, collName, callback) {
     });
 };
 
-exports.getCandidates = function (preferences, score, floatRange, callback) {
+exports.readConformedData = function (xlsxName, collName, callback) {
+    var obj = xlsx.parse(xlsxName);
+    var data = obj[0].data;
+    console.log('Get plans conformed: ' + data.length + ' ' + data[0].length);
+    data.splice(0, 2);
 
-    // console.log(preferences);
-    var result = [];
+    mongoModel.saveConformedData(data, collName, function (data) {
+        callback(data);
+    });
+};
+
+exports.getCandidates = function (preferences, score, floatRange, callback) {
     mongoModel.getRanking(score, 'score2ranks', function (data) {
         console.log('getRanking....');
         var rankingNum = data[0].grandTotal;
@@ -66,21 +75,141 @@ exports.getCandidates = function (preferences, score, floatRange, callback) {
         console.log('Range: ' + gtLimit + ' ~ ' + ltLimit);
         var query = {
             $and: [
-                {rankingNumber: {$gte: gtLimit}},
-                {rankingNumber: {$lt: ltLimit}},
+                {pastRankingNumber: {$gte: gtLimit}},
+                {pastRankingNumber: {$lt: ltLimit}},
                 {professionName: new RegExp(preferences.preference1)}
             ]
         };
-        mongoModel.getSchoolsData(query, 'schools', function (data) {
-            // for(var partIndex in data){
-            //     data[partIndex]['class'] = 'part_1';
-            // }
-            // if(data[data.length - 1].class){
-            //     callback(data);
-            // }
+        var fields = null;
+        var sorts = {sort: {pastRankingNumber: -1}};
+        mongoModel.getConformedData(query, fields, sorts,'plans_conformed_2017', function (err, data) {
+            console.log(err);
+            console.log(data.length);
             callback(data);
         });
     });
+};
+
+var getAutoRecommendPart = function (query, fields, sorts, weights, rankingNum, callbackPart) {
+    // console.log('Params below:');
+    // console.log(query);
+    // console.log(fields);
+    // console.log(sorts);
+
+    mongoModel.getConformedData(query, fields, sorts, 'plans_conformed_2017', function (err, data) {
+        if (data.length) {
+            var result = data.slice();
+            console.log('Auto recommend result length: ' + result.length);
+            var mark = 0, count = weights, selectedArr = [];
+            if(result.length > 1){
+                for (var i = 0; i < result.length; i++) {
+                    if (result[i].pastRankingNumber < rankingNum) {
+                        mark = i;
+                        console.log('RankingNum: ' + rankingNum);
+                        console.log('Mark between ' + result[mark - 1].pastRankingNumber + ' ~ ' + result[mark].pastRankingNumber);
+                        break;
+                    } else {
+                    }
+                }
+                console.log('Step 1: ' + selectedArr.length);
+                for (var j = (mark - 1); j > 0; j--) {
+                    if (count > 0) {
+                        // console.log(count);
+                        selectedArr.push(result[j]);
+                        count--;
+                    }
+                }
+                console.log('Step 2: ' + selectedArr.length);
+                count = weights;
+                for (var x = mark; x < result.length; x++) {
+                    if (count > 0) {
+                        selectedArr.push(result[x]);
+                        count--;
+                    }
+                }
+                console.log('Step 3: ' + selectedArr.length);
+                callbackPart(err, selectedArr);
+            }
+            else{
+                console.log('Result length < 1 Or = 1');
+                callbackPart(err, result);
+            }
+        }
+        else {
+            callbackPart(err, []);
+        }
+    });
+};
+
+exports.getAutoRecommend = function (preferences, score, floatRange, cb) {
+    /* 先从一段一份表里获得自己的分数对应的名次 */
+    mongoModel.getRanking(score, 'score2ranks', function (data) {
+        console.log('getRanking....');
+
+        var rankingNum = data[0].grandTotal;
+        var ltLimit = rankingNum + floatRange;
+        var gtLimit = rankingNum > floatRange ? (rankingNum - floatRange) : 0;
+        console.log('Float:' + floatRange + 'Range: ' + gtLimit + ' ~ ' + ltLimit);
+
+        var fields = null;
+        var sorts = {sort: {pastRankingNumber: -1}};
+        async.auto({
+            firstStep: function (callback) {
+                var weights = 15;
+                var query = {
+                    $and: [
+                        {pastRankingNumber: {$gte: gtLimit}},
+                        {pastRankingNumber: {$lt: ltLimit}},
+                        {professionName: new RegExp(preferences.preference1)}
+                    ]
+                };
+                getAutoRecommendPart(query, fields, sorts, weights, rankingNum, function (err, data) {
+                    // console.log(data);
+                    callback(null, data);
+                });
+            },
+            secondStep: function (callback) {
+                var weights = 15;
+                var query = {
+                    $and: [
+                        {pastRankingNumber: {$gte: gtLimit}},
+                        {pastRankingNumber: {$lt: ltLimit}},
+                        {professionName: new RegExp(preferences.preference2)}
+                    ]
+                };
+                getAutoRecommendPart(query, fields, sorts, weights, rankingNum, function (err, data) {
+                    // console.log(data);
+                    callback(null, data);
+                });
+            },
+            thirdStep: function (callback) {
+                var weights = 10;
+                var query = {
+                    $and: [
+                        {pastRankingNumber: {$gte: gtLimit}},
+                        {pastRankingNumber: {$lt: ltLimit}},
+                        {professionName: new RegExp(preferences.preference3)}
+                    ]
+                };
+                getAutoRecommendPart(query, fields, sorts, weights, rankingNum, function (err, data) {
+                    // console.log(data);
+                    callback(null, data);
+                });
+            }
+        }, function (error, result) {
+            console.log('Error:');
+            console.log(error);
+            console.log('Result -> First step' + result['firstStep'].length +
+                ' / Second Step ' + result['secondStep'].length + ' / ThirdStep ' + result['thirdStep'].length);
+            if (!error) {
+                cb(null, result);
+            }
+            else {
+                cb(error, null);
+            }
+        });
+    });
+    // callback('Return Auto Recommend....');
 };
 
 exports.conformData = function () {
@@ -184,7 +313,7 @@ exports.conformData = function () {
     });
 };
 
-exports.conformDataAsync  = function(){
+exports.conformDataAsync = function () {
     mongoModel.conformDataAsync('2017plans', 'schools', 'conforms', 'news', 'nulls');
 };
 

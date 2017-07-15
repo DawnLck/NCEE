@@ -31,6 +31,16 @@ th {
 #ncee-candidates .part_3{
     background-color: #5CA7BC;
 }
+#ncee-resultList .preference_1{
+    background-color: #EF9A9A;
+}
+#ncee-resultList .preference_2{
+    background-color: #E57373;
+}
+#ncee-resultList .preference_3{
+    background-color: #EF5350;
+}
+
 .table > tbody > tr > td {
     vertical-align: middle;
     height: 60px;

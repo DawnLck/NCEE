@@ -110,7 +110,8 @@ var plans2017Schema = new Schema({
     versionKey: false
 });
 
-var plansConformedSchema = new Schema({
+/*合表的模式*/
+var plansConformedSchema_2017 = new Schema({
     // itemIndex: Number, /* 序号 */
     schoolCode: String, /* 院校代码 */
     schoolName: String, /* 院校名称 */
@@ -142,6 +143,44 @@ var plansConformedSchema = new Schema({
     averageScore2016: Number, /* 平均分 */
     lowestScore2016: Number, /* 最低分 */
     rankingNumber2016: Number /* 名次号 */
+}, {
+    versionKey: false
+});
+
+var plansConformedSchema = new Schema({
+    itemIndex: Number, /* 序号 */
+    schoolCode: String, /* 院校代码 */
+    schoolName: String, /* 院校名称 */
+    schoolCategoryCode: String, /* 院校类别代码 */
+    schoolCategory: String, /* 院校类别（专科或者是本科）*/
+    Is985: String, /* 是否是985 */
+    Is211: String, /* 是否是211 */
+    schoolLevel: String, /* 院校层次 */
+
+    // professionId: Number,
+    professionCode: String, /* 专业代码 */
+    professionName: String, /* 专业名称 */
+    professionYear: String, /* 专业学年 */
+    professionCost: String, /* 专业学费（每年） */
+    professionIntro: String, /* 专业介绍 */
+
+    subjectsCode: String, /* 需修科目代码 */
+    subjects: String, /* 需修科目 */
+
+    plansNum: String, /* 计划数 */
+
+    IsNormal: String, /* 是否师范类学校 */
+    city: String, /* 城市 */
+    province: String, /* 省份 */
+    IsPrivate: String, /* 是否是民办学校 */
+
+    schoolIndex: String, /* 院校代 号 */
+
+    pastAverageScore: Number, /* 以往平均分 */
+    pastLowestScore: Number, /* 以往最低分 */
+    pastRankingNumber: Number, /* 以往最低名次号 */
+    pastBatch: String, /* 以往批次 */
+    pastAdmissionCount: Number      /* 以往录取人数 */
 }, {
     versionKey: false
 });
@@ -437,6 +476,73 @@ exports.savePlansConformedItemAsync = function (item, data2016, collName) {
     }
 };
 
+exports.saveConformedData = function (arr, collName, callback) {
+    if (arr.length) {
+        var arrLength = arr.length;
+        var targetModel = mongoose.model(collName, plansConformedSchema, collName);
+
+        console.log('CollName:' + collName + ' ArrayLength: ' + arrLength);
+
+        targetModel.remove({}, function (err) {
+            if (err) {
+                console.log(err);
+            }
+        });
+
+        // console.log(arr[0]);
+        for (var i = 0; i < arrLength; i++) {
+            var item = {
+                itemIndex: arr[i][0], /* 序号 */
+                schoolCode: arr[i][1], /* 院校代码 */
+                schoolName: arr[i][2], /* 院校名称 */
+                schoolCategoryCode: arr[i][3], /* 院校类别代码 */
+                schoolCategory: arr[i][4], /* 院校类别（专科或者是本科）*/
+                Is985: arr[i][5], /* 是否是985 */
+                Is211: arr[i][6], /* 是否是211 */
+                schoolLevel: arr[i][7], /* 院校层次 */
+
+                // professionId: Number,
+                professionCode: arr[i][8], /* 专业代码 */
+                professionName: arr[i][9], /* 专业名称 */
+                professionYear: arr[i][10], /* 专业学年 */
+                professionCost: arr[i][11], /* 专业学费（每年） */
+                professionIntro: arr[i][12], /* 专业介绍 */
+
+                subjectsCode: arr[i][13], /* 需修科目代码 */
+                subjects: arr[i][14], /* 需修科目 */
+
+                plansNum: arr[i][15], /* 计划数 */
+
+                IsNormal: arr[i][16], /* 是否师范类学校 */
+                city: arr[i][17], /* 城市 */
+                province: arr[i][18], /* 省份 */
+                IsPrivate: arr[i][19], /* 是否是民办学校 */
+
+                schoolIndex: arr[i][20], /* 院校代号 */
+
+                pastAverageScore: arr[i][21], /* 以往平均分 */
+                pastLowestScore: arr[i][22], /* 以往最低分 */
+                pastRankingNumber: arr[i][23], /* 以往最低名次号 */
+                pastBatch: arr[i][24], /* 以往批次 */
+                pastAdmissionCount: arr[i][25]      /* 以往录取人数 */
+            };
+            // console.log(item);
+            // console.log('Processing ' + i + '/' + arrLength);
+            new targetModel(item).save(function (index, err) {
+                if (err) {
+                    console.log(index + '/' + arrLength + ' 存入失败.');
+                    return err;
+                } else {
+                    // console.log(i + '/' + arrLength + ' 存入成功.');
+                }
+            }(i));
+        }
+        callback('Save Data ' + collName + ' Array Success');
+    } else {
+    }
+};
+
+
 exports.getAdmissionData = function (query, collName, callback) {
     // console.log(query);
     // console.log(collName);
@@ -451,6 +557,18 @@ exports.getSchoolsData = function (query, collName, callback) {
     var schoolsModel = mongoose.model(collName, admissionSchema);
     schoolsModel.find(query, function (err, data) {
         callback(data);
+    });
+};
+
+exports.getConformedData = function (query, fields, sorts, collName, callback) {
+    var conformedModel = mongoose.model(collName, plansConformedSchema);
+    conformedModel.find(query, fields, sorts, function (err, data) {
+        console.log('Get conformed model...');
+        console.log(query);
+        console.log(fields);
+        console.log(sorts);
+        console.log(data);
+        callback(err, data);
     });
 };
 
@@ -482,7 +600,6 @@ exports.getPlans2016 = function (item, query, collName, callback) {
         callback(item, data);
     });
 };
-
 
 exports.conformDataAB = function (collName_A, collName_B, collection_A, collection_B, collection_C) {
     var plansModelA = mongoose.model(collName_A, plans2017Schema);
@@ -594,7 +711,6 @@ exports.conformDataAB = function (collName_A, collName_B, collection_A, collecti
         }
     });
 };
-
 
 exports.conformDataAsync = function (collName_A, collName_B, collection_A, collection_B, collection_C) {
     var plansModelA = mongoose.model(collName_A, plans2017Schema);
