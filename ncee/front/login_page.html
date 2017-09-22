@@ -10,40 +10,38 @@
 <div id="app" class="container text-center">
     <!--<img src="https://vuejs.org/images/logo.png" alt="Vue logo">-->
     <h1 v-text="greeting"></h1>
-    <section class="text-center col-lg-12">
-        <div id="ncee-login">
-            <form class="col-lg-12 form-horizontal">
-                <div class="form-group">
-                    <label for="ncee-login-user" class="col-sm-2 control-label">账号</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" id="ncee-login-user"
-                               v-model="userInfo.name" placeholder="请输入账号">
+    <div id="ncee-login">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label for="ncee-login-user" class="col-sm-4 control-label">账号</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="ncee-login-user"
+                           v-model="userInfo.name" placeholder="请输入账号">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="ncee-login-password" class="col-sm-4 control-label">密码</label>
+                <div class="col-sm-8">
+                    <input type="password" class="form-control" id="ncee-login-password"
+                           v-model="userInfo.password" placeholder="请输入密码">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"> 记住我
+                        </label>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="ncee-login-password" class="col-sm-2 control-label">密码</label>
-                    <div class="col-sm-10">
-                        <input type="password" class="form-control" id="ncee-login-password"
-                               v-model="userInfo.password" placeholder="请输入密码">
-                    </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="button" class="btn btn-default col-lg-12" @click="userLogin">登陆</button>
                 </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox"> 记住我
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <button type="button" class="btn btn-default col-lg-12" @click="userLogin">登陆</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </section>
+            </div>
+        </form>
+    </div>
 </div>
 <script src="dist/jquery/dist/jquery.min.js"></script>
 <script src="dist/bootstrap/dist/js/bootstrap.min.js"></script>

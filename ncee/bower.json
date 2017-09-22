@@ -18,6 +18,7 @@
     "bootstrap": "^3.3.7",
     "vue": "^2.3.4",
     "jquery": "^3.2.1",
-    "datatables": "^1.10.15"
+    "datatables": "^1.10.15",
+    "bootstrap-select": "^1.12.4"
   }
 }

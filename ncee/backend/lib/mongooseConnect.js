@@ -27,4 +27,3 @@ db.connection.on("error", function (error) {
 db.connection.on("open", function () {
     console.log("Success to connect the MongoDB.");
 });
-

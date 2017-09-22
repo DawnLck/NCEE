@@ -3,6 +3,7 @@
 <head>
     <title>高考咨询系统</title>
     <link rel="stylesheet" href="dist/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="dist/bootstrap-select/dist/css/bootstrap-select.min.css">
     <!--<link rel="stylesheet" href="dist/datatables/media/css/dataTables.bootstrap.min.css">-->
     <link rel="stylesheet" href="stylesheet/index.css">
 </head>
@@ -13,26 +14,74 @@
     <section>
         <div id="ncee-select" class="col-lg-12">
             <form class="col-lg-12">
-                <div id="ncee-preferences" class="col-lg-12 left">
-                    <div class="form-group">专业偏好选择：</div>
-                    <div class="form-group">
-                        <label for="nceePreference1">专业偏好1</label>
-                        <input type="text" class="form-control" id="nceePreference1"
-                               v-model="selectRange.preference1" placeholder="请输入...">
-                    </div>
-                    <div class="form-group">
-                        <label for="nceePreference2">专业偏好2</label>
-                        <input type="text" class="form-control" id="nceePreference2"
-                               v-model="selectRange.preference2" placeholder="请输入...">
-                    </div>
-                    <div class="form-group">
-                        <label for="nceePreference3">专业偏好3</label>
-                        <input type="text" class="form-control" id="nceePreference3"
-                               v-model="selectRange.preference3" placeholder="请输入...">
+                <div class="col-lg-12">
+                    <div id="ncee-preferences" class="col-lg-12">
+                        <div class="form-group">专业偏好选择：</div>
+                        <div class="form-group">
+                            <label for="nceePreference1">专业偏好1</label>
+                            <select class="form-control selectpicker preference" id="nceePreference1"
+                                    v-model="selectRange.preference1">
+                                <option v-for="item in options.professionCategory" v-text="item"
+                                        v-bind:value="item"></option>
+                            </select>
+                            <!--<input type="text" class="form-control" id="nceePreference1"-->
+                                   <!--v-model="selectRange.preference1" placeholder="请输入...">-->
+                        </div>
+                        <div class="form-group">
+                            <label for="nceePreference2">专业偏好2</label>
+                            <select class="form-control selectpicker preference" id="nceePreference2"
+                                    v-model="selectRange.preference2">
+                                <option v-for="item in options.professionCategory" v-text="item"
+                                        v-bind:value="item"></option>
+                            </select>
+                            <!--<input type="text" class="form-control" id="nceePreference2"-->
+                                   <!--v-model="selectRange.preference2" placeholder="请输入...">-->
+                        </div>
+                        <div class="form-group">
+                            <label for="nceePreference3">专业偏好3</label>
+                            <!--<input type="text" class="form-control" id="nceePreference3"-->
+                                   <!--v-model="selectRange.preference3" placeholder="请输入...">-->
+                            <select class="form-control selectpicker preference" id="nceePreference3"
+                                    v-model="selectRange.preference3">
+                                <option v-for="item in options.professionCategory" v-text="item"
+                                        v-bind:value="item"></option>
+                            </select>
+                        </div>
                     </div>
                 </div>
+                <div class="col-lg-12 form-group">
+                    <div id="ncee-province" class="col-lg-4">
+                        <div class="form-group">学校地域：</div>
+                        <div class="form-group">
+                            <label for="nceeProvince">请输入正确的省份信息</label>
+                            <select class="form-control" id="nceeProvince"
+                                    v-model="selectRange.province">
+                                <option v-for="item in options.province" v-text="item.text"
+                                        v-bind:value="item.alt"></option>
+                            </select>
+                            <!--<input type="text" class="form-control" id="nceeProvince"-->
+                            <!--v-model="selectRange.province" placeholder="请输入...">-->
+                        </div>
+                    </div>
+                    <div id="ncee-score" class="col-lg-4 left">
+                        <div class="form-group">分数: </div>
+                        <div class="form-group" style="width: 80%">
+                            <label for="nceeScore">请输入你今年的高考分数</label>
+                            <input type="text" class="form-control" id="nceeScore"
+                                   v-model="selectRange.score" placeholder="请输入...">
+                        </div>
+                    </div>
+                    <div id="ncee-bias" class="col-lg-4">
+                        <div class="form-group">偏差值：</div>
+                        <div class="form-group">
+                            <label for="nceeProvince">请输入偏差值，默认为15</label>
+                            <input type="text" class="form-control" id="nceeBias"
+                                   v-model="selectRange.bias" placeholder="请输入...">
+                        </div>
+                    </div>
+                </div>
+
                 <div class="col-lg-12">
-                    <div class="col-lg-1"></div>
                     <!--<div id="ncee-ranking" class="col-lg-3 left">-->
                         <!--<div class="form-group">名次号：</div>-->
                         <!--<div class="form-group">-->
@@ -41,15 +90,6 @@
                                    <!--v-model="selectRange.ranking" placeholder="请输入...">-->
                         <!--</div>-->
                     <!--</div>-->
-
-                    <div id="ncee-score" class="col-lg-3 left">
-                        <div class="form-group">分数: </div>
-                        <div class="form-group">
-                            <label for="nceeScore" class="sr-only">分数</label>
-                            <input type="text" class="form-control" id="nceeScore"
-                                   v-model="selectRange.score" placeholder="请输入...">
-                        </div>
-                    </div>
 
                     <div id="ncee-range" class="col-lg-4 left">
                         浮动区域：
@@ -103,9 +143,80 @@
                             </label>
                         </div>
                     </div>
+                    <div id="ncee-schoolLevel" class="col-lg-2 left">
+                        学校层次：
+                        <div class="checkbox">
+                            <label for="nceeSchoolLevel_985">
+                                <input type="checkbox" id="nceeSchoolLevel_985"
+                                       v-model="selectRange.schoolLevel_985" placeholder="请输入...">985
+                            </label>
 
-                    <button type="button" class="col-lg-2 btn btn-default" @click="manualRecommend()">人工推荐</button>
-                    <button type="button" class="col-lg-2 btn btn-default" @click="autoRecommend()">智能推荐</button>
+                        </div>
+                        <div class="checkbox">
+                            <label for="nceeSchoolLevel_211">
+                                <input type="checkbox"  id="nceeSchoolLevel_211"
+                                       v-model="selectRange.schoolLevel_211" placeholder="请输入...">211
+                            </label>
+
+                        </div>
+                    </div>
+
+                    <div id="ncee-subjects" class="col-lg-6 left">
+                        选修科目：
+                        <div  v-for="item in selectRange.subjects" class="checkbox">
+                            <label v-bind:for="item.id">
+                                <input type="checkbox" v-bind:id="item.id" v-model="item.selected" />
+                                {{item.subject}}
+                            </label>
+                        </div>
+                        <!--<div class="checkbox">-->
+                            <!--<label for="nceeSubject_Physical">-->
+                                <!--<input type="checkbox" id="nceeSubject_Physical">物理-->
+                            <!--</label>-->
+
+                        <!--</div>-->
+                        <!--<div class="checkbox">-->
+                            <!--<label for="nceeSubject_Chemistry">-->
+                                <!--<input type="checkbox" id="nceeSubject_Chemistry">化学-->
+                            <!--</label>-->
+
+                        <!--</div>-->
+                        <!--<div class="checkbox">-->
+                            <!--<label for="nceeSubject_Biological">-->
+                                <!--<input type="checkbox" id="nceeSubject_Biological">生物-->
+                            <!--</label>-->
+
+                        <!--</div>-->
+                        <!--<div class="checkbox">-->
+                            <!--<label for="nceeSubject_Political">-->
+                                <!--<input type="checkbox" id="nceeSubject_Political">思想政治-->
+                            <!--</label>-->
+
+                        <!--</div>-->
+                        <!--<div class="checkbox">-->
+                            <!--<label for="nceeSubject_History">-->
+                                <!--<input type="checkbox" id="nceeSubject_History">历史-->
+                            <!--</label>-->
+
+                        <!--</div>-->
+                        <!--<div class="checkbox">-->
+                            <!--<label for="nceeSubject_Geography">-->
+                                <!--<input type="checkbox" id="nceeSubject_Geography">地理-->
+                            <!--</label>-->
+
+                        <!--</div>-->
+                        <!--<div class="checkbox">-->
+                            <!--<label for="nceeSubject_Technology">-->
+                                <!--<input type="checkbox" id="nceeSubject_Technology">技术-->
+                            <!--</label>-->
+
+                        <!--</div>-->
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="col-lg-2"></div>
+                    <button type="button" class="col-lg-4 btn btn-default" @click="manualRecommend()">人工推荐</button>
+                    <button type="button" class="col-lg-4 btn btn-default" @click="autoRecommend()">智能推荐</button>
                 </div>
             </form>
         </div>
@@ -164,7 +275,7 @@
                         <th class="col-lg-1">#</th>
                         <th class="col-lg-2">学校</th>
                         <th class="col-lg-2">专业</th>
-                        <th class="col-lg-1">专业代码</th>
+                        <th class="col-lg-1">地域</th>
 
                         <th class="col-lg-1">计划数</th>
                         <th class="col-lg-1">学校层次</th>
@@ -183,7 +294,7 @@
                         <td class="col-lg-1" v-text="(index+1)"></td>
                         <td class="col-lg-2" v-text="item.schoolName"></td>
                         <td class="col-lg-2" v-text="item.professionName"></td>
-                        <td class="col-lg-1" v-text="item.professionCode"></td>
+                        <td class="col-lg-1" v-text="item.province"></td>
 
                         <td class="col-lg-1" v-text="item.plansNum"></td>
                         <td class="col-lg-1" v-text="item.schoolLevel"></td>
@@ -214,6 +325,7 @@
 </div>
 <script src="dist/jquery/dist/jquery.min.js"></script>
 <script src="dist/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="dist/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
 <script src="dist/vue/dist/vue.min.js"></script>
 <!--<script src="dist/datatables/media/js/dataTables.bootstrap.min.js"></script>-->
 <script src="javascript/index.js"></script>

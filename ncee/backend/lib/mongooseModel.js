@@ -111,41 +111,41 @@ var plans2017Schema = new Schema({
 });
 
 /*合表的模式*/
-var plansConformedSchema_2017 = new Schema({
-    // itemIndex: Number, /* 序号 */
-    schoolCode: String, /* 院校代码 */
-    schoolName: String, /* 院校名称 */
-    schoolCategoryCode: String, /* 院校类别代码 */
-    schoolCategory: String, /* 院校类别（专科或者是本科）*/
-
-    // professionId: Number,
-    professionCode: String, /* 专业代码 */
-    professionName: String, /* 专业名称 */
-    professionYear: String, /* 专业学年 */
-    professionCost: String, /* 专业学费（每年） */
-    professionIntro: String, /* 专业介绍 */
-
-    subjectsCode: String, /* 需修科目代码 */
-    subjects: String, /* 需修科目 */
-
-    plansNum: String, /* 计划数 */
-
-    IsNormal: String, /* 是否师范类学校 */
-    city: String, /* 城市 */
-    Is985: String, /* 是否是985 */
-    Is211: String, /* 是否是211 */
-    province: String, /* 省份 */
-    IsPrivate: String, /* 是否是民办学校 */
-
-    schoolIndex: String, /* 院校名次号 */
-
-    admissionCount2016: Number, /* 录取人数 */
-    averageScore2016: Number, /* 平均分 */
-    lowestScore2016: Number, /* 最低分 */
-    rankingNumber2016: Number /* 名次号 */
-}, {
-    versionKey: false
-});
+// var plansConformedSchema_2017 = new Schema({
+//     // itemIndex: Number, /* 序号 */
+//     schoolCode: String, /* 院校代码 */
+//     schoolName: String, /* 院校名称 */
+//     schoolCategoryCode: String, /* 院校类别代码 */
+//     schoolCategory: String, /* 院校类别（专科或者是本科）*/
+//
+//     // professionId: Number,
+//     professionCode: String, /* 专业代码 */
+//     professionName: String, /* 专业名称 */
+//     professionYear: String, /* 专业学年 */
+//     professionCost: String, /* 专业学费（每年） */
+//     professionIntro: String, /* 专业介绍 */
+//
+//     subjectsCode: String, /* 需修科目代码 */
+//     subjects: String, /* 需修科目 */
+//
+//     plansNum: String, /* 计划数 */
+//
+//     IsNormal: String, /* 是否师范类学校 */
+//     city: String, /* 城市 */
+//     Is985: String, /* 是否是985 */
+//     Is211: String, /* 是否是211 */
+//     province: String, /* 省份 */
+//     IsPrivate: String, /* 是否是民办学校 */
+//
+//     schoolIndex: String, /* 院校名次号 */
+//
+//     admissionCount2016: Number, /* 录取人数 */
+//     averageScore2016: Number, /* 平均分 */
+//     lowestScore2016: Number, /* 最低分 */
+//     rankingNumber2016: Number /* 名次号 */
+// }, {
+//     versionKey: false
+// });
 
 var plansConformedSchema = new Schema({
     itemIndex: Number, /* 序号 */
@@ -159,6 +159,7 @@ var plansConformedSchema = new Schema({
 
     // professionId: Number,
     professionCode: String, /* 专业代码 */
+    professionCategory: String, /* 专业类别 */
     professionName: String, /* 专业名称 */
     professionYear: String, /* 专业学年 */
     professionCost: String, /* 专业学费（每年） */
@@ -169,9 +170,9 @@ var plansConformedSchema = new Schema({
 
     plansNum: String, /* 计划数 */
 
-    IsNormal: String, /* 是否师范类学校 */
     city: String, /* 城市 */
     province: String, /* 省份 */
+    IsNormal: String, /* 是否师范类学校 */
     IsPrivate: String, /* 是否是民办学校 */
 
     schoolIndex: String, /* 院校代 号 */
@@ -182,6 +183,75 @@ var plansConformedSchema = new Schema({
     pastBatch: String, /* 以往批次 */
     pastAdmissionCount: Number      /* 以往录取人数 */
 }, {
+    versionKey: false
+});
+
+//标准精简模式
+var standardReducedSchema = new Schema({
+    // itemIndex: Number, /* 序号 */
+    schoolCode: String, /* 院校代码 */
+    schoolName: String, /* 院校名称 */
+
+    // professionId: Number,
+    professionCode: String, /* 专业代码 */
+    professionName: String, /* 专业名称 */
+    professionYear: String, /* 专业学年 */
+
+    province: String, /* 省份 */
+    city: String, /* 城市 */
+
+    schoolCategory: String, /* 院校类别（专科或者是本科）*/
+
+    plansNum: String, /* 计划数 */
+
+    // subjectsCode: String, /* 需修科目代码 */
+    subjects: String, /* 需修科目 */
+
+    professionCost: String, /* 专业学费（每年） */
+    professionIntro: String /* 专业介绍 */
+}, {
+    versionKey: false
+});
+
+/*  NCEE-Data
+ *  2017-8-26 与plansConformedSchema保持一致
+ *  最终确定下来的数据保存格式，包含当年的数据和往年的五项数据 */
+var ncee_standard_schema = new Schema({
+    itemIndex: Number, /* 序号 */
+    schoolCode: String, /* 院校代码 */
+    schoolName: String, /* 院校名称 */
+    schoolCategoryCode: String, /* 院校类别代码 */
+    schoolCategory: String, /* 院校类别（专科或者是本科）*/
+    Is985: String, /* 是否是985 */
+    Is211: String, /* 是否是211 */
+    schoolLevel: String, /* 院校层次 */
+
+    // professionId: Number,
+    professionCode: String, /* 专业代码 */
+    professionCategory: String, /* 专业类别 */
+    professionName: String, /* 专业名称 */
+    professionYear: String, /* 专业学年 */
+    professionCost: String, /* 专业学费（每年） */
+    professionIntro: String, /* 专业介绍 */
+
+    subjectsCode: String, /* 需修科目代码 */
+    subjects: String, /* 需修科目 */
+
+    plansNum: String, /* 计划数 */
+
+    city: String, /* 城市 */
+    province: String, /* 省份 */
+    IsNormal: String, /* 是否师范类学校 */
+    IsPrivate: String, /* 是否是民办学校 */
+
+    schoolIndex: String, /* 院校代号 */
+
+    pastAverageScore: Number, /* 以往平均分 */
+    pastLowestScore: Number, /* 以往最低分 */
+    pastRankingNumber: Number, /* 以往最低名次号 */
+    pastBatch: String, /* 以往批次 */
+    pastAdmissionCount: Number      /* 以往录取人数 */
+},{
     versionKey: false
 });
 
@@ -476,6 +546,62 @@ exports.savePlansConformedItemAsync = function (item, data2016, collName) {
     }
 };
 
+exports.saveConformedOne = function (item, collName, callback) {
+    // delete item._id;
+    if (item) {
+        // console.log(item);
+
+        var targetModel = mongoose.model(collName, plansConformedSchema, collName);
+        new targetModel({
+            itemIndex: item.itemIndex, /* 序号 */
+            schoolCode: item.schoolCode, /* 院校代码 */
+            schoolName: item.schoolName, /* 院校名称 */
+            schoolCategoryCode: item.schoolCategoryCode, /* 院校类别代码 */
+            schoolCategory: item.schoolCategory, /* 院校类别（专科或者是本科）*/
+            Is985: item.Is985, /* 是否是985 */
+            Is211: item.Is211, /* 是否是211 */
+            schoolLevel: item.schoolLevel, /* 院校层次 */
+
+            // professionId: Number,
+            professionCode: item.professionCode, /* 专业代码 */
+            professionCategory: item.professionCategory,
+            professionName: item.professionName, /* 专业名称 */
+            professionYear: item.professionYear, /* 专业学年 */
+            professionCost: item.professionCost, /* 专业学费（每年） */
+            professionIntro: item.professionIntro, /* 专业介绍 */
+
+            subjectsCode: item.subjectsCode, /* 需修科目代码 */
+            subjects: item.subjects, /* 需修科目 */
+
+            plansNum: item.plansNum, /* 计划数 */
+
+            IsNormal: item.IsNormal, /* 是否师范类学校 */
+            city: item.city, /* 城市 */
+            province: item.province, /* 省份 */
+            IsPrivate: item.IsPrivate, /* 是否是民办学校 */
+
+            schoolIndex: item.schoolIndex, /* 院校代号 */
+
+            pastAverageScore: item.pastAverageScore, /* 以往平均分 */
+            pastLowestScore: item.pastLowestScore, /* 以往最低分 */
+            pastRankingNumber: item.pastRankingNumber, /* 以往最低名次号 */
+            pastBatch: item.pastBatch, /* 以往批次 */
+            pastAdmissionCount: item.pastAdmissionCount  /* 以往录取人数 */
+        }).save(function (err) {
+            if (err) {
+                // console.log(index + '/' + arrLength + ' 存入失败.');
+
+                callback(err);
+            } else {
+                callback('Save conformed data one success...');
+                // console.log(i + '/' + arrLength + ' 存入成功.');
+            }
+        });
+    } else {
+        callback('The item does not exist');
+    }
+};
+
 exports.saveConformedData = function (arr, collName, callback) {
     if (arr.length) {
         var arrLength = arr.length;
@@ -489,8 +615,13 @@ exports.saveConformedData = function (arr, collName, callback) {
             }
         });
 
+
+
         // console.log(arr[0]);
         for (var i = 0; i < arrLength; i++) {
+            if(!arr[i][0]){
+                continue;
+            }
             var item = {
                 itemIndex: arr[i][0], /* 序号 */
                 schoolCode: arr[i][1], /* 院校代码 */
@@ -503,28 +634,29 @@ exports.saveConformedData = function (arr, collName, callback) {
 
                 // professionId: Number,
                 professionCode: arr[i][8], /* 专业代码 */
-                professionName: arr[i][9], /* 专业名称 */
-                professionYear: arr[i][10], /* 专业学年 */
-                professionCost: arr[i][11], /* 专业学费（每年） */
-                professionIntro: arr[i][12], /* 专业介绍 */
+                professionCategory: arr[i][9], /*专业类别*/
+                professionName: arr[i][10], /* 专业名称 */
+                professionYear: arr[i][11], /* 专业学年 */
+                professionCost: arr[i][12], /* 专业学费（每年） */
+                professionIntro: arr[i][13], /* 专业介绍 */
 
-                subjectsCode: arr[i][13], /* 需修科目代码 */
-                subjects: arr[i][14], /* 需修科目 */
+                subjectsCode: arr[i][14], /* 需修科目代码 */
+                subjects: arr[i][15], /* 需修科目 */
 
-                plansNum: arr[i][15], /* 计划数 */
+                plansNum: arr[i][16], /* 计划数 */
 
-                IsNormal: arr[i][16], /* 是否师范类学校 */
                 city: arr[i][17], /* 城市 */
                 province: arr[i][18], /* 省份 */
-                IsPrivate: arr[i][19], /* 是否是民办学校 */
+                IsNormal: arr[i][19], /* 是否师范类学校 */
+                IsPrivate: arr[i][20], /* 是否是民办学校 */
 
-                schoolIndex: arr[i][20], /* 院校代号 */
+                schoolIndex: arr[i][21], /* 院校代号 */
 
-                pastAverageScore: arr[i][21], /* 以往平均分 */
-                pastLowestScore: arr[i][22], /* 以往最低分 */
-                pastRankingNumber: arr[i][23], /* 以往最低名次号 */
-                pastBatch: arr[i][24], /* 以往批次 */
-                pastAdmissionCount: arr[i][25]      /* 以往录取人数 */
+                pastAverageScore: arr[i][22], /* 以往平均分 */
+                pastLowestScore: arr[i][23], /* 以往最低分 */
+                pastRankingNumber: arr[i][24], /* 以往最低名次号 */
+                pastBatch: arr[i][25], /* 以往批次 */
+                pastAdmissionCount: arr[i][26]      /* 以往录取人数 */
             };
             // console.log(item);
             // console.log('Processing ' + i + '/' + arrLength);
@@ -542,6 +674,42 @@ exports.saveConformedData = function (arr, collName, callback) {
     }
 };
 
+exports.saveStandardReducedOne = function (arr, collName, callback) {
+    var targetModel = mongoose.model(collName, standardReducedSchema, collName);
+    var item = {
+        schoolCode: arr[1], /* 院校代码 */
+        schoolName: arr[2], /* 院校名称 */
+
+        // professionId: Number,
+        professionCode: arr[3], /* 专业代码 */
+        professionName: arr[4], /* 专业名称 */
+        professionYear: arr[5], /* 专业学年 */
+
+        province: arr[6], /* 省份 */
+        city: arr[7], /* 城市 */
+
+        schoolCategory: arr[8], /* 院校类别（专科或者是本科）*/
+
+        plansNum: arr[9], /* 计划数 */
+
+        // subjectsCode: String, /* 需修科目代码 */
+        subjects: arr[10], /* 需修科目 */
+
+        professionCost: arr[11], /* 专业学费（每年） */
+        professionIntro: arr[12] /* 专业介绍 */
+    };
+    // console.log(item);
+    new targetModel(item).save(function (err) {
+        if (err) {
+            console.log('存入失败......');
+            // return err;
+            callback('Save Data ' + err);
+        } else {
+            // console.log(i + '/' + arrLength + ' 存入成功.');
+            callback('Save Data ' + collName + ' Item Success');
+        }
+    });
+};
 
 exports.getAdmissionData = function (query, collName, callback) {
     // console.log(query);
@@ -563,17 +731,29 @@ exports.getSchoolsData = function (query, collName, callback) {
 exports.getConformedData = function (query, fields, sorts, collName, callback) {
     var conformedModel = mongoose.model(collName, plansConformedSchema);
     conformedModel.find(query, fields, sorts, function (err, data) {
-        console.log('Get conformed model...');
-        console.log(query);
-        console.log(fields);
-        console.log(sorts);
-        console.log(data);
+        // console.log('Get conformed model...');
+        // console.log(query);
+        // console.log(fields);
+        // console.log(sorts);
+        // console.log(data);
         callback(err, data);
     });
 };
 
+exports.getOneConformedData = function (query, fields, sorts, collName, src, callback) {
+    var conformedModel = mongoose.model(collName, plansConformedSchema);
+    conformedModel.findOne(query, fields, sorts, function (err, data) {
+        console.log('Get conformed model...');
+        // console.log(query);
+        // console.log(fields);
+        // console.log(sorts);
+        // console.log(data);
+        callback(err, data, src);
+    });
+};
+
 exports.getRanking = function (score, collName, callback) {
-    console.log('RankScore: ' + score);
+    // console.log('RankScore: ' + score);
     var rankingModel = mongoose.model(collName, score2rankSchema);
     rankingModel.find({'score': score}, function (err, data) {
         // console.log(data);

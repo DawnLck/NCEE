@@ -4,17 +4,22 @@ var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({extended: false});
 var mongoInit = require('./backend/init/mongoInit');
 
+var alipayRoute = require('./backend/routes/alipayRoute');
+
 var app = express();
 app.use(express.static('front'));
-// app.use(express.static('front/dist'));
+app.use('/alipayRoute', alipayRoute);
 
 app.get('/', function (req, res) {
     // res.sendFile('./front/login.html');
-    res.sendFile(__dirname + '/front/' + 'login_page.html');
+    // res.sendFile(__dirname + '/front/' + 'login_page.html');
+    res.redirect('/alipayRoute/alipayInit');
 });
+
 app.get('/index', function (req, res) {
     res.sendFile(__dirname + '/front/' + 'index_page.html');
 });
+
 app.post('/getCandidates', urlencodedParser, function (req, res) {
     if (!req.body) {
         return res.sendStatus(400);
@@ -31,6 +36,7 @@ app.post('/getCandidates', urlencodedParser, function (req, res) {
     });
     console.log('Get new web page item....');
 });
+
 app.post('/userLogin', urlencodedParser, function (req, res) {
     if (!req.body) {
         return res.sendStatus(400);
@@ -53,29 +59,23 @@ app.post('/userLogin', urlencodedParser, function (req, res) {
 });
 
 app.get('/getAutoRecommend', function (req, res) {
+    console.log("\nGET query:.....");
     console.log(req.query);
-    var preferences = {
-        preference1: req.query.preference1,
-        preference2: req.query.preference2,
-        preference3: req.query.preference3
-    };
-    var score = parseInt(req.query.score);
-    if(score > 686){
-        score = 686;
-    }
-    mongoInit.getAutoRecommend(preferences, score, parseInt(req.query.floatRange), function (err, data) {
-        if(err){
+    console.log();
+
+    mongoInit.getAutoRecommend(req.query, function (err, data) {
+        if (err) {
             console.log(err);
             res.send(err);
         }
         else {
-            console.log('Server: get auto recommend items.');
+            console.log('\nServer: get auto recommend items.');
             res.send(data);
         }
     });
 });
 
-var server = app.listen(3000, function () {
+var server = app.listen(3001, function () {
     var host = server.address().address;
     var port = server.address().port;
     //
@@ -99,11 +99,19 @@ var dbMake = function () {
     // mongoInit.readConformedData('backend/data/plans_conformed_final_2017.xlsx', 'plans_conformed_2017', function (data) {
     //     console.log(data);
     // });
+    // mongoInit.filterData_2ndBatchAsync('backend/data/2017_2nd_Merged.xlsx', 'plans_conformed_2017', function (data) {
+    //     console.log(data);
+    // });
+    // mongoInit.readConformedData('backend/data/2017_2nd_merged_p.xlsx', 'plans_2nd_conformed_2017', function (data) {
+    //     console.log(data);
+    // });
+    // mongoInit.readConformedData('backend/data/ncee_2017.xlsx', 'ncee_2017', function (data) {
+    //     console.log(data);
+    // });
 };
 
 var init = function () {
     dbMake();
 };
-init();
 
-// console.log("liangck");ian
+init();

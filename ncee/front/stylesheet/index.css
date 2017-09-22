@@ -1,20 +1,14 @@
-.container {
-    width: 1500px;
+@media screen and (min-width: 1700px){
+    .container {
+        width: 1500px;
+    }
 }
 
 th {
     text-align: center;
 }
 
-#ncee-preferences .form-group {
-    display: inline-block;
-}
-
-#ncee-ranking .form-group {
-    display: inline-block;
-}
-
-#ncee-score .form-group {
+.form-group{
     display: inline-block;
 }
 
@@ -22,22 +16,26 @@ th {
     display: inline-block;
 }
 
-#ncee-candidates .part_1{
+.checkbox{
+    display: inline-block;
+}
+
+#ncee-candidates .part_3{
     background-color: #C6EDEA;
 }
 #ncee-candidates .part_2{
     background-color: #B0D9EF;
 }
-#ncee-candidates .part_3{
+#ncee-candidates .part_1{
     background-color: #5CA7BC;
 }
-#ncee-resultList .preference_1{
+#ncee-resultList .preference_3{
     background-color: #EF9A9A;
 }
 #ncee-resultList .preference_2{
     background-color: #E57373;
 }
-#ncee-resultList .preference_3{
+#ncee-resultList .preference_1{
     background-color: #EF5350;
 }
 
@@ -47,20 +45,23 @@ th {
     padding-top: 20px;
     /*line-height: 3;*/
 }
-
+.table thead tr{
+    padding-right: 20px;
+    display: flex;
+}
 .table .checkbox {
     margin: 0;
 }
 
 .table .btn {
     top: -8px;
+    padding:0.4em 0.6em;
 }
 
 .table > tbody > tr {
     display: flex;
 }
 #ncee-login{
-    width: 50%;
     display: inline-block;
     text-align: -webkit-left;
     margin-top: 20px;
