@@ -8,15 +8,17 @@ var alipayRoute = require('./backend/routes/alipayRoute');
 
 var app = express();
 app.use(express.static('front'));
+app.use(express.static('front/index'));
 app.use('/alipayRoute', alipayRoute);
 
 app.get('/', function (req, res) {
     // res.sendFile('./front/login.html');
     // res.sendFile(__dirname + '/front/' + 'login_page.html');
-    res.redirect('/alipayRoute/alipayInit');
+    // res.redirect('/alipayRoute/alipayInit');
+    res.sendFile(__dirname + '/front/index/index.html');
 });
 
-app.get('/index', function (req, res) {
+app.get('/ncee', function (req, res) {
     res.sendFile(__dirname + '/front/' + 'index_page.html');
 });
 

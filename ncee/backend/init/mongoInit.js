@@ -154,6 +154,8 @@ var autoRecommendPartByProfession = function (query, fields, sorts, rankingNum, 
 
 var autoRecommendPartByScore = function (preferences, score, floatRange, province, is985, is211, subjects, cb) {
     /* 先从一段一份表里获得自己的分数对应的名次 */
+    // console.log('scoreA:'+score);
+    score = score> 686 ? 686 : parseInt(score);
     mongoModel.getRanking(score, 'score2ranks', function (data) {
         var rankingNum = parseInt(data[0].grandTotal);
         var ltLimit = rankingNum + floatRange;
@@ -161,12 +163,44 @@ var autoRecommendPartByScore = function (preferences, score, floatRange, provinc
 
         // console.log(preferences);
         // console.log(is985 === '0');
-        console.log('Score: ' + score +' province:'+ ' 985高校:' + is985 + ' 211高校:' + is211);
+        console.log('Score: ' + score + ' province:' + ' 985高校:' + is985 + ' 211高校:' + is211);
         console.log('[GetRanking]: ' + score + ' -  ' + rankingNum +
             ' Range: ' + gtLimit + ' ~ ' + ltLimit);
 
         var fields = null;
         var sorts = {sort: {pastRankingNumber: -1}};
+
+        var provinceQuery = [];
+        for (var i = 0; i < province.length; i++) {
+            provinceQuery.push({province: new RegExp(province[i])});
+        }
+
+        var schoolLevelQuery = {};
+        if (parseInt(is985) === 985) {
+            if (parseInt(is211) === 211) {
+                schoolLevelQuery = {
+                    $or: [
+                        {
+                            Is985: is985
+                        },
+                        {
+                            Is211: is211
+                        }
+                    ]
+                };
+            } else {
+                schoolLevelQuery = {
+                    Is985: is985
+                }
+            }
+        } else {
+            schoolLevelQuery = {
+                $and: [
+                    {Is985: '0'},
+                    {Is211: is211}
+                ]
+            }
+        }
 
         async.auto({
             firstStep: function (callback) {
@@ -175,13 +209,10 @@ var autoRecommendPartByScore = function (preferences, score, floatRange, provinc
                         {pastRankingNumber: {$gte: gtLimit}},
                         {pastRankingNumber: {$lt: ltLimit}},
                         {professionCategory: new RegExp(preferences.preference1)},
-                        {province: new RegExp(province)},
                         {
-                            $or: [
-                                {Is985: is985},
-                                {Is211: is211}
-                            ]
+                            $or: provinceQuery
                         },
+                        schoolLevelQuery,
                         {
                             $or: subjects
                         }
@@ -205,13 +236,10 @@ var autoRecommendPartByScore = function (preferences, score, floatRange, provinc
                         {pastRankingNumber: {$gte: gtLimit}},
                         {pastRankingNumber: {$lt: ltLimit}},
                         {professionCategory: new RegExp(preferences.preference2)},
-                        {province: new RegExp(province)},
                         {
-                            $or: [
-                                {Is985: is985},
-                                {Is211: is211}
-                            ]
+                            $or: provinceQuery
                         },
+                        schoolLevelQuery,
                         {
                             $or: subjects
                         }
@@ -232,13 +260,10 @@ var autoRecommendPartByScore = function (preferences, score, floatRange, provinc
                         {pastRankingNumber: {$gte: gtLimit}},
                         {pastRankingNumber: {$lt: ltLimit}},
                         {professionCategory: new RegExp(preferences.preference3)},
-                        {province: new RegExp(province)},
                         {
-                            $or: [
-                                {Is985: is985},
-                                {Is211: is211}
-                            ]
+                            $or: provinceQuery
                         },
+                        schoolLevelQuery,
                         {
                             $or: subjects
                         }
@@ -276,12 +301,12 @@ exports.getAutoRecommend = function (params, cb) {
         preference3: params.preference3
     };
     var bias = parseInt(params.bias);
-    var score = parseInt(params.score) > 686 ? 686 : parseInt(params.score);
+    var score = parseInt(params.score);
     var floatRange = parseInt(params.floatRange);
     var province = params.province;
-    if (province === '全部省市') {
-        province = '';
-    }
+    // if (province === '全部省市') {
+    //     province = '';
+    // }
     // if (province.length === 0) {
     //     province = null;
     // }
@@ -297,7 +322,9 @@ exports.getAutoRecommend = function (params, cb) {
             subjectsArr.push({subjects: new RegExp(params.subjects[i].subject)});
         }
     }
-    console.log(subjectsArr);
+    // console.log(subjectsArr);
+
+    console.log('score:' + score);
 
     async.auto({
         scoreHigher: function (callback) {

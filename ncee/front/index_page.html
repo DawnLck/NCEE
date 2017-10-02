@@ -4,7 +4,6 @@
     <title>高考咨询系统</title>
     <link rel="stylesheet" href="dist/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="dist/bootstrap-select/dist/css/bootstrap-select.min.css">
-    <!--<link rel="stylesheet" href="dist/datatables/media/css/dataTables.bootstrap.min.css">-->
     <link rel="stylesheet" href="stylesheet/index.css">
 </head>
 <body>
@@ -52,9 +51,9 @@
                 <div class="col-lg-12 form-group">
                     <div id="ncee-province" class="col-lg-4">
                         <div class="form-group">学校地域：</div>
-                        <div class="form-group">
+                        <div class="form-group" style="width: 70%">
                             <label for="nceeProvince">请输入正确的省份信息</label>
-                            <select class="form-control" id="nceeProvince"
+                            <select class="form-control selectpicker" multiple data-actions-box="true" id="nceeProvince"
                                     v-model="selectRange.province">
                                 <option v-for="item in options.province" v-text="item.text"
                                         v-bind:value="item.alt"></option>
@@ -275,6 +274,8 @@
                         <th class="col-lg-1">#</th>
                         <th class="col-lg-2">学校</th>
                         <th class="col-lg-2">专业</th>
+                        <th class="col-lg-2">大类方向</th>
+
                         <th class="col-lg-1">地域</th>
 
                         <th class="col-lg-1">计划数</th>
@@ -294,6 +295,7 @@
                         <td class="col-lg-1" v-text="(index+1)"></td>
                         <td class="col-lg-2" v-text="item.schoolName"></td>
                         <td class="col-lg-2" v-text="item.professionName"></td>
+                        <td class="col-lg-2" v-text="item.professionCategory"></td>
                         <td class="col-lg-1" v-text="item.province"></td>
 
                         <td class="col-lg-1" v-text="item.plansNum"></td>

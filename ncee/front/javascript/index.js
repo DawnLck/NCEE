@@ -10,7 +10,7 @@ var app = new Vue({
             preference1: '计算机类',
             preference2: '经济学类',
             preference3: '机械类',
-            province: '全部省市',
+            province: [],
             schoolLevel_985: false,
             schoolLevel_211: true,
             ranking: 10000,
@@ -77,7 +77,8 @@ var app = new Vue({
                 "图书情报与档案管理类", "物流管理与工程类", "工业工程类", "服务业管理类", "艺术学理论类", "音乐与舞蹈学类",
                 "戏剧与影视学类", "美术学类", "设计学类", "军事学类", "军事测绘与控制类", "军制学类", "军队指挥学类"
             ],
-            province: [{value: 0, text: '全部省市', alt: '全部省市'},
+            province: [
+                // {value: 0, text: '全部省市', alt: '全部省市'},
                 {value: 11, text: '北京市', alt: '北京'},
                 {value: 12, text: '天津市', alt: '天津'},
                 {value: 13, text: '河北省', alt: '河北'},
@@ -208,92 +209,97 @@ var app = new Vue({
         },
 
         autoRecommend: function () {
-            this.clearAll();
-            this.autoRe = true;
-            if (this.selectRange.score < 359) {
-                window.alert('所选最低分不能低于359分！');
-            }
-            console.log('Auto recommend college volunteers...');
-
-            var params = {};
-
-            $.extend(true, params, app.$data.selectRange);
-
-            var subjects = [];
-
-            function compare(property) {
-                return function (a, b) {
-                    var value1 = parseInt(a[property]);
-                    var value2 = parseInt(b[property]);
-                    switch (a['class']) {
-                        case 'preference_1':
-                            value1 -= 400;
-                            break;
-                        case 'preference_2':
-                            value1 -= 200;
-                            break;
-                    }
-                    switch (b['class']) {
-                        case 'preference_1':
-                            value2 -= 400;
-                            break;
-                        case 'preference_2':
-                            value2 -= 200;
-                            break;
-                    }
-                    return value1 - value2;
+            // console.log('11111'+this.selectRange.province);
+            if(this.selectRange.province.length < 1){
+                window.alert('请选择省的区域！');
+            }else{
+                this.clearAll();
+                this.autoRe = true;
+                if (this.selectRange.score < 359) {
+                    window.alert('所选最低分不能低于359分！');
                 }
-            }
+                console.log('Auto recommend college volunteers...');
 
-            $.get('/getAutoRecommend', params, function (data) {
-                var i, j, g;
-                var result = [];
+                var params = {};
 
-                var classArr = ['preference_1', 'preference_2', 'preference_3'];
-                var scoreArr = ['scoreHigher', 'scoreNormal', 'scoreLower'];
-                var professionArr = ['firstStep', 'secondStep', 'thirdStep'];
+                $.extend(true, params, app.$data.selectRange);
 
-                var scoreStratify = 3;
-                var professionStratify = 3;
-                for (i = 0; i < scoreStratify; i++) {
-                    var length_count = 0;
-                    var segResult = [];
-                    for (j = 0; j < professionStratify; j++) {
-                        var itemList = data[scoreArr[i]][professionArr[j]];
-                        var length_iList = itemList.length;
-                        length_count += length_iList;
-                        for (g = 0; g < length_iList; g++) {
-                            itemList[g].class = classArr[j];
-                            itemList[g].checked = true;
+                var subjects = [];
+
+                function compare(property) {
+                    return function (a, b) {
+                        var value1 = parseInt(a[property]);
+                        var value2 = parseInt(b[property]);
+                        switch (a['class']) {
+                            case 'preference_1':
+                                value1 -= 400;
+                                break;
+                            case 'preference_2':
+                                value1 -= 200;
+                                break;
                         }
-                        segResult.push.apply(segResult, itemList.slice(0));
-                    }
-                    var limit = i < 2 ? 30 : 20;
-                    var step = Math.floor(length_count / limit);
-                    step = step < 1 ? 1 : step;
-                    var test_count = 0;
-                    for (g = 0; g < segResult.length;) {
-                        result.push(segResult[g]);
-                        if (++test_count === limit) {
-                            break;
+                        switch (b['class']) {
+                            case 'preference_1':
+                                value2 -= 400;
+                                break;
+                            case 'preference_2':
+                                value2 -= 200;
+                                break;
                         }
-                        g += step;
-                    }
-                    console.log('Stage ' + i + ': ' + segResult.length + '  step: ' + step + ' SubResult length: ' + test_count);
-                }
-
-                result.sort(compare('pastRankingNumber'));
-
-                for (i = 1; i < result.length; i++) {
-                    if (result[i].professionName === result[i - 1].professionName && result[i].schoolName === result[i - 1].schoolName) {
-                        result.splice(i, 1);
+                        return value1 - value2;
                     }
                 }
 
-                app.$data.results = result.slice(0);
-                // console.log(app.$data.results);
-                console.log('Post selected data...ok');
-            }, 'json')
+                $.get('/getAutoRecommend', params, function (data) {
+                    var i, j, g;
+                    var result = [];
+
+                    var classArr = ['preference_1', 'preference_2', 'preference_3'];
+                    var scoreArr = ['scoreHigher', 'scoreNormal', 'scoreLower'];
+                    var professionArr = ['firstStep', 'secondStep', 'thirdStep'];
+
+                    var scoreStratify = 3;
+                    var professionStratify = 3;
+                    for (i = 0; i < scoreStratify; i++) {
+                        var length_count = 0;
+                        var segResult = [];
+                        for (j = 0; j < professionStratify; j++) {
+                            var itemList = data[scoreArr[i]][professionArr[j]];
+                            var length_iList = itemList.length;
+                            length_count += length_iList;
+                            for (g = 0; g < length_iList; g++) {
+                                itemList[g].class = classArr[j];
+                                itemList[g].checked = true;
+                            }
+                            segResult.push.apply(segResult, itemList.slice(0));
+                        }
+                        var limit = i < 2 ? 30 : 20;
+                        var step = Math.floor(length_count / limit);
+                        step = step < 1 ? 1 : step;
+                        var test_count = 0;
+                        for (g = 0; g < segResult.length;) {
+                            result.push(segResult[g]);
+                            if (++test_count === limit) {
+                                break;
+                            }
+                            g += step;
+                        }
+                        console.log('Stage ' + i + ': ' + segResult.length + '  step: ' + step + ' SubResult length: ' + test_count);
+                    }
+
+                    result.sort(compare('pastRankingNumber'));
+
+                    for (i = 1; i < result.length; i++) {
+                        if (result[i].professionName === result[i - 1].professionName && result[i].schoolName === result[i - 1].schoolName) {
+                            result.splice(i, 1);
+                        }
+                    }
+
+                    app.$data.results = result.slice(0);
+                    // console.log(app.$data.results);
+                    console.log('Post selected data...ok');
+                }, 'json')
+            }
         },
 
         checkCandidate: function (item) {
