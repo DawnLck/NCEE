@@ -43,6 +43,7 @@ th {
     vertical-align: middle;
     height: 60px;
     padding-top: 20px;
+    overflow: hidden;
     /*line-height: 3;*/
 }
 .table thead tr{
