@@ -1,4 +1,6 @@
 
 \.idea/
 
-ncee/front/dist/
+front/dist/
+
+node_modules/
