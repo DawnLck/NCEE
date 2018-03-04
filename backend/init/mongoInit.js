@@ -12,6 +12,7 @@ var async = require('async');
 // var conformedPlansTable = 'plans_2nd_conformed_2017';
 var conformedPlansTable = 'ncee_2017';
 
+/* 读取数据 */
 exports.readSchoolsExcel = function (xlsxName, collName, callback) {
     var obj = xlsx.parse(xlsxName);
     var data = obj[0].data;
@@ -59,6 +60,7 @@ exports.readPlans2017 = function (xlsxName, collName, callback) {
     });
 };
 
+/* 读取合并数据（2016 ~ 2017） */
 exports.readConformedData = function (xlsxName, collName, callback) {
     var obj = xlsx.parse(xlsxName);
     var data = obj[0].data;
@@ -70,6 +72,7 @@ exports.readConformedData = function (xlsxName, collName, callback) {
     });
 };
 
+/* 获取候选列表 */
 exports.getCandidates = function (preferences, score, floatRange, callback) {
 
     mongoModel.getRanking(score, 'score2ranks', function (data) {
@@ -95,6 +98,7 @@ exports.getCandidates = function (preferences, score, floatRange, callback) {
     });
 };
 
+/* 自动推荐算法 */
 var autoRecommendPartByProfessionWithWeight = function (query, fields, sorts, weights, rankingNum, callbackPart) {
     // console.log('Params below:');
     // console.log(query);
