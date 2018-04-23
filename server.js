@@ -57,7 +57,7 @@ app.post('/userLogin', urlencodedParser, function (req, res) {
             permission: false
         });
     }
-    console.log('Get new web page item....');
+    // console.log('Get new web page item....');
 });
 
 app.get('/getAutoRecommend', function (req, res) {
