@@ -12,7 +12,7 @@
   "dependencies": {
     "async": "^2.5.0",
     "body-parser": "^1.17.2",
-    "bootstrap": "^4.1.0",
+    "bootstrap": "3.3.7",
     "bootstrap-select": "^1.13.1",
     "crypto": "^1.0.1",
     "datatables": "^1.10.13",
