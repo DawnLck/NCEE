@@ -1,12 +1,13 @@
-var express = require('express');
-var bodyParser = require('body-parser');
+const express = require('express'),
+    bodyParser = require('body-parser'),
+    config = require('./config');
 
-var urlencodedParser = bodyParser.urlencoded({extended: false});
-var mongoInit = require('./backend/init/mongoInit');
+let urlencodedParser = bodyParser.urlencoded({extended: false});
+let mongoInit = require('./backend/init/mongoInit');
 
-var alipayRoute = require('./backend/routes/alipayRoute');
+let alipayRoute = require('./backend/routes/alipayRoute');
 
-var app = express();
+let app = express();
 app.use(express.static('front'));
 app.use(express.static('front/index'));
 app.use('/alipayRoute', alipayRoute);
@@ -26,7 +27,7 @@ app.post('/getCandidates', urlencodedParser, function (req, res) {
     if (!req.body) {
         return res.sendStatus(400);
     }
-    var preferences = {
+    let preferences = {
         preference1: req.body.preference1,
         preference2: req.body.preference2,
         preference3: req.body.preference3
@@ -77,17 +78,19 @@ app.get('/getAutoRecommend', function (req, res) {
     });
 });
 
-var server = app.listen(8082, function () {
-    var host = server.address().address;
-    var port = server.address().port;
+let server = app.listen(3001, function () {
+    let host = server.address().address;
+    let port = server.address().port;
     //
     console.log('Example app listening at http://%s:%s', host, port);
 });
 
-var dbMake = function () {
-    // mongoInit.readScore2RankExcel('backend/data/score2rank.xlsx', 'score2ranks', function (data) {
-    //     console.log(data);
-    // });
+let dbMake = function () {
+    console.log(config);
+    mongoInit.readScore2RankExcel('backend/data/' + config.currentYear + '/score2rank.xlsx', 'score2ranks', function (data) {
+        console.log(data);
+    });
+
     // mongoInit.readSchoolsExcel('backend/data/schools.xlsx', 'schools', function (data) {
     //     console.log(data);
     // });
@@ -112,7 +115,7 @@ var dbMake = function () {
     // });
 };
 
-var init = function () {
+let init = function () {
     dbMake();
 };
 
