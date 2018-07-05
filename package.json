@@ -13,7 +13,7 @@
     "async": "^2.5.0",
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
-    "mongoose": "^4.10.6",
-    "node-xlsx": "^0.7.4"
+    "mongoose": "^5.2.1",
+    "node-xlsx": "^0.12.1"
   }
 }

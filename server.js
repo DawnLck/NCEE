@@ -87,9 +87,10 @@ let server = app.listen(3001, function () {
 
 let dbMake = function () {
     console.log(config);
-    mongoInit.readScore2RankExcel('backend/data/' + config.currentYear + '/score2rank.xlsx', 'score2ranks', function (data) {
-        console.log(data);
-    });
+
+    // mongoInit.readScore2RankExcel('backend/data/' + config.currentYear + '/score2rank.xlsx', 'score2ranks', function (data) {
+    //     console.log(data);
+    // });
 
     // mongoInit.readSchoolsExcel('backend/data/schools.xlsx', 'schools', function (data) {
     //     console.log(data);
