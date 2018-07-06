@@ -1,16 +1,19 @@
 const express = require('express'),
     bodyParser = require('body-parser'),
-    config = require('./config');
+    config = require('./config'),
+    mongoInit = require('./backend/init/mongoInit'),
+    mongooseModel = require('./backend/lib/mongooseModel'),
 
-let urlencodedParser = bodyParser.urlencoded({extended: false});
-let mongoInit = require('./backend/init/mongoInit');
+    alipayRoute = require('./backend/routes/alipayRoute'),
+    recommedRoute = require('./backend/routes/recommend'),
 
-let alipayRoute = require('./backend/routes/alipayRoute');
+    urlencodedParser = bodyParser.urlencoded({extended: false});
 
 let app = express();
 app.use(express.static('front'));
 app.use(express.static('front/index'));
 app.use('/alipayRoute', alipayRoute);
+app.use('/recommend', recommedRoute);
 
 app.get('/', function (req, res) {
     // res.sendFile('./front/login.html');
@@ -61,23 +64,6 @@ app.post('/userLogin', urlencodedParser, function (req, res) {
     console.log('Get new web page item....');
 });
 
-app.get('/getAutoRecommend', function (req, res) {
-    console.log("\nGET query:.....");
-    console.log(req.query);
-    console.log();
-
-    mongoInit.getAutoRecommend(req.query, function (err, data) {
-        if (err) {
-            console.log(err);
-            res.send(err);
-        }
-        else {
-            console.log('\nServer: get auto recommend items.');
-            res.send(data);
-        }
-    });
-});
-
 let server = app.listen(3001, function () {
     let host = server.address().address;
     let port = server.address().port;
@@ -85,8 +71,8 @@ let server = app.listen(3001, function () {
     console.log('Example app listening at http://%s:%s', host, port);
 });
 
-let dbMake = function () {
-    console.log(config);
+async function dbMake() {
+    console.log('DB Make ... ');
 
     // mongoInit.readScore2RankExcel('backend/data/' + config.currentYear + '/score2rank.xlsx', 'score2ranks', function (data) {
     //     console.log(data);
@@ -111,13 +97,19 @@ let dbMake = function () {
     // mongoInit.readConformedData('backend/data/2017_2nd_merged_p.xlsx', 'plans_2nd_conformed_2017', function (data) {
     //     console.log(data);
     // });
-    // mongoInit.readConformedData('backend/data/ncee_2017.xlsx', 'ncee_2017', function (data) {
+    // mongoInit.readConformedData('backend/data/2017/ncee_2017.xlsx', 'ncee_2017', function (data) {
     //     console.log(data);
     // });
-};
+}
 
-let init = function () {
-    dbMake();
-};
+async function test(){
+    console.log('Test the backend ... ');
+    // mongooseModel.getConformedData({},null,{});
+}
+
+async function init() {
+    await test();
+    await dbMake();
+}
 
 init();

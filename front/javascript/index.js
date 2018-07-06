@@ -1,4 +1,4 @@
-var app = new Vue({
+const app = new Vue({
     el: '#app',
     data: {
         greeting: '欢迎进入高考咨询界面',
@@ -172,13 +172,13 @@ var app = new Vue({
             }
             // console.log('Post selected data...');
             console.log('Manual recommend college volunteers...');
-            var params = {};
+            let params = {};
             $.extend(true, params, app.$data.selectRange);
             params.score = parseInt(params.score);
             params.score += 15;
             console.log(params);
             $.post('/getCandidates', params, function (data) {
-                for (var i = 0; i < data.length; i++) {
+                for (let i = 0; i < data.length; i++) {
                     data[i].checked = false;
                     data[i].class = 'part_1';
                 }
@@ -188,7 +188,7 @@ var app = new Vue({
             }, 'json');
             params.score -= 15;
             $.post('/getCandidates', params, function (data) {
-                for (var i = 0; i < data.length; i++) {
+                for (let i = 0; i < data.length; i++) {
                     data[i].checked = false;
                     data[i].class = 'part_2';
                 }
@@ -198,7 +198,7 @@ var app = new Vue({
             }, 'json');
             params.score -= 15;
             $.post('/getCandidates', params, function (data) {
-                for (var i = 0; i < data.length; i++) {
+                for (let i = 0; i < data.length; i++) {
                     data[i].checked = false;
                     data[i].class = 'part_3';
                 }
@@ -220,16 +220,16 @@ var app = new Vue({
                 }
                 console.log('Auto recommend college volunteers...');
 
-                var params = {};
+                let params = {};
 
                 $.extend(true, params, app.$data.selectRange);
 
-                var subjects = [];
+                let subjects = [];
 
                 function compare(property) {
                     return function (a, b) {
-                        var value1 = parseInt(a[property]);
-                        var value2 = parseInt(b[property]);
+                        let value1 = parseInt(a[property]);
+                        let value2 = parseInt(b[property]);
                         switch (a['class']) {
                             case 'preference_1':
                                 value1 -= 400;
@@ -250,22 +250,22 @@ var app = new Vue({
                     }
                 }
 
-                $.get('/getAutoRecommend', params, function (data) {
-                    var i, j, g;
-                    var result = [];
+                $.get('/recommend/getAutoRecommend', params, function (data) {
+                    let i, j, g;
+                    let result = [];
 
-                    var classArr = ['preference_1', 'preference_2', 'preference_3'];
-                    var scoreArr = ['scoreHigher', 'scoreNormal', 'scoreLower'];
-                    var professionArr = ['firstStep', 'secondStep', 'thirdStep'];
+                    let classArr = ['preference_1', 'preference_2', 'preference_3'];
+                    let scoreArr = ['scoreHigher', 'scoreNormal', 'scoreLower'];
+                    let professionArr = ['firstStep', 'secondStep', 'thirdStep'];
 
-                    var scoreStratify = 3;
-                    var professionStratify = 3;
+                    let scoreStratify = 3;
+                    let professionStratify = 3;
                     for (i = 0; i < scoreStratify; i++) {
-                        var length_count = 0;
-                        var segResult = [];
+                        let length_count = 0;
+                        let segResult = [];
                         for (j = 0; j < professionStratify; j++) {
-                            var itemList = data[scoreArr[i]][professionArr[j]];
-                            var length_iList = itemList.length;
+                            let itemList = data[scoreArr[i]][professionArr[j]];
+                            let length_iList = itemList.length;
                             length_count += length_iList;
                             for (g = 0; g < length_iList; g++) {
                                 itemList[g].class = classArr[j];
@@ -273,10 +273,10 @@ var app = new Vue({
                             }
                             segResult.push.apply(segResult, itemList.slice(0));
                         }
-                        var limit = i < 2 ? 30 : 20;
-                        var step = Math.floor(length_count / limit);
+                        let limit = i < 2 ? 30 : 20;
+                        let step = Math.floor(length_count / limit);
                         step = step < 1 ? 1 : step;
-                        var test_count = 0;
+                        let test_count = 0;
                         for (g = 0; g < segResult.length;) {
                             result.push(segResult[g]);
                             if (++test_count === limit) {
@@ -309,8 +309,8 @@ var app = new Vue({
                 this.results.push(item);
             }
             else {
-                var resultsCopy = this.results;
-                for (var reIndex in resultsCopy) {
+                let resultsCopy = this.results;
+                for (let reIndex in resultsCopy) {
                     if (item.schoolCode === resultsCopy[reIndex].schoolCode) {
                         if (item.professionCode === resultsCopy[reIndex].professionCode) {
                             this.results.splice(reIndex, 1);
@@ -322,8 +322,8 @@ var app = new Vue({
         },
 
         deleteCheckedCandidate: function (index, item) {
-            var candidatesCopy = this.candidates;
-            for (var canIndex in candidatesCopy) {
+            let candidatesCopy = this.candidates;
+            for (let canIndex in candidatesCopy) {
                 if (item.schoolCode === candidatesCopy[canIndex].schoolCode) {
                     if (item.professionCode === candidatesCopy[canIndex].professionCode) {
                         candidatesCopy[canIndex].checked = false;
@@ -343,21 +343,21 @@ var app = new Vue({
 
         downloadResultTable: function () {
             // window.open('data:application/vnd.ms-excel,' + $('#dvData').html());
-            var csvContent = "data:text/excel;charset=gb2312,";
-            var resultCopy = this.results;
+            let csvContent = "data:text/excel;charset=gb2312,";
+            let resultCopy = this.results;
             resultCopy.forEach(function (infoArray, index) {
-                var item = [
+                let item = [
                     // infoArray.index,
                     infoArray.schoolCode + ' ' + infoArray.schoolName,
                     infoArray.professionCode + ' ' + infoArray.professionName
                 ];
-                var dataString = item.join(",");
+                let dataString = item.join(",");
                 csvContent += index < resultCopy.length ? dataString + "\n" : dataString;
             });
             console.log(csvContent);
-            var encodedUri = encodeURI(csvContent);
+            let encodedUri = encodeURI(csvContent);
             // window.open(encodedUri);
-            var link = document.createElement("a");
+            let link = document.createElement("a");
             link.setAttribute("href", encodedUri);
             link.setAttribute("download", "customers.csv");
             document.body.appendChild(link); // Required for FF

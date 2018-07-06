@@ -1,11 +1,11 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express'),
+    router = express.Router();
 
 //获取验证码
-var getMySign = function (params) {
-    var sPara = [];//转换为数组利于排序 除去空值和签名参数
+let getMySign = function (params) {
+    let sPara = [];//转换为数组利于排序 除去空值和签名参数
     if (!params) return null;
-    for (var key in params) {
+    for (let key in params) {
         if ((!params[key]) || key === "sign" || key === "sign_type") {
             console.log('null:' + key);
             continue;
@@ -14,10 +14,10 @@ var getMySign = function (params) {
     }
     sPara.sort();
     //生成签名结果
-    var prestr = "";
+    let prestr = "";
     //把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
-    for (var i2 = 0; i2 < sPara.length; i2++) {
-        var obj = sPara[i2];
+    for (let i2 = 0; i2 < sPara.length; i2++) {
+        let obj = sPara[i2];
         if (i2 === sPara.length - 1) {
             prestr = prestr + obj[0] + "=" + obj[1];
         } else {
@@ -28,22 +28,22 @@ var getMySign = function (params) {
     prestr = prestr + AlipayConfig.key; //把拼接后的字符串再与安全校验码直接连接起来
     //body=Hello&buyer_email=13758698870&buyer_id=2088002007013600&discount=-5&extra_common_param=你好，这是测试商户的广告。&gmt_close=2008-10-22 20:49:46&gmt_create=2008-10-22 20:49:31&gmt_payment=2008-10-22 20:49:50&gmt_refund=2008-10-29 19:38:25&is_total_fee_adjust=N&notify_id=70fec0c2730b27528665af4517c27b95&notify_time=2009-08-12 11:08:32&notify_type=交易状态同步通知(trade_status_sync)&out_trade_no=3618810634349901&payment_type=1&price=10.00&quantity=1&refund_status=REFUND_SUCCESS&seller_email=chao.chenc1@alipay.com&seller_id=2088002007018916&sign=_p_w_l_h_j0b_gd_aejia7n_ko4_m%2Fu_w_jd3_nx_s_k_mxus9_hoxg_y_r_lunli_pmma29_t_q%3D%3D&sign_type=DSA&subject=iphone手机&total_fee=10.00&trade_no=2008102203208746&trade_status=TRADE_FINISHED&use_coupon=N
 
-    var crypto = require('crypto');
+    let crypto = require('crypto');
     return crypto.createHash('md5').update(prestr, AlipayConfig.input_charset).digest("hex");
 };
 
 //发送请求
-var requestUrl = function (host, path, callback) {
-    var https = require('https');
+let requestUrl = function (host, path, callback) {
+    let https = require('https');
 
-    var options = {
+    let options = {
         host: host,
         port: 443,
         path: path,
         method: 'GET'
     };
 
-    var req = https.request(options, function (res) {
+    let req = https.request(options, function (res) {
         console.log("statusCode: ", res.statusCode);
         console.log("headers: ", res.headers);
 
@@ -78,7 +78,7 @@ var requestUrl = function (host, path, callback) {
  *1、检查浏览器配置，不让浏览器做弹框屏蔽设置
  *2、更换浏览器或电脑，重新登录查询。
  */
-var AlipayConfig = {
+let AlipayConfig = {
     //↓↓↓↓↓↓↓↓↓↓请在这里配置您的基本信息↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
     // 合作身份者ID，以2088开头由16位纯数字组成的字符串
     partner: "2088721524558520",
@@ -116,17 +116,17 @@ var AlipayConfig = {
 };
 
 /* 支付宝服务付款消息回调 */
-var AlipayNotify = {
+let AlipayNotify = {
     verify: function (params, callback) {
-        var mysign = getMySign(params);
-        var sign = params["sign"] ? params["sign"] : "";
+        let mysign = getMySign(params);
+        let sign = params["sign"] ? params["sign"] : "";
         if (mysign === sign) {
-            var responseTxt = "true";
+            let responseTxt = "true";
             if (params["notify_id"]) {
                 //获取远程服务器ATN结果，验证是否是支付宝服务器发来的请求
 
-                var partner = AlipayConfig.partner;
-                var veryfy_path = AlipayConfig.HTTPS_VERIFY_PATH + "partner=" + partner + "&notify_id=" + params["notify_id"];
+                let partner = AlipayConfig.partner;
+                let veryfy_path = AlipayConfig.HTTPS_VERIFY_PATH + "partner=" + partner + "&notify_id=" + params["notify_id"];
                 console.log('Verify Path: ' + veryfy_path);
 
                 requestUrl(AlipayConfig.ALIPAY_HOST, veryfy_path, function (responseTxt) {
@@ -178,36 +178,36 @@ router.get('/alipayInit', function (req, res) {
     //必填参数//
 
     //请与贵网站订单系统中的唯一订单号匹配
-    var out_trade_no = new Date().getTime();
+    let out_trade_no = new Date().getTime();
 
     //订单名称，显示在支付宝收银台里的“商品名称”里，显示在支付宝的交易管理的“商品名称”的列表里。
-    // var subject = req.body.subject;
-    var subject = '新高考平台款项支付';
+    // let subject = req.body.subject;
+    let subject = '新高考平台款项支付';
 
     //订单描述、订单详细、订单备注，显示在支付宝收银台里的“商品描述”里
-    // var body = req.body.alibody;
-    var body = '新高考平台款项支付，支付完毕后会自动跳转到新高考平台页面';
+    // let body = req.body.alibody;
+    let body = '新高考平台款项支付，支付完毕后会自动跳转到新高考平台页面';
 
     //订单总金额，显示在支付宝收银台里的“应付总额”里
-    // var total_fee = req.body.total_fee;
-    var total_fee = 0.01;
+    // let total_fee = req.body.total_fee;
+    let total_fee = 0.01;
 
 
     //扩展功能参数——默认支付方式//
 
     //默认支付方式，取值见“即时到帐接口”技术文档中的请求参数列表
-    var payMethod = "";
+    let payMethod = "";
 
     //默认网银代号，代号列表见“即时到帐接口”技术文档“附录”→“银行列表”
-    var defaultBank = "";
+    let defaultBank = "";
 
     //扩展功能参数——防钓鱼//
 
     //防钓鱼时间戳
-    var anti_phishing_key = "";
+    let anti_phishing_key = "";
 
     //获取客户端的IP地址，建议：编写获取客户端IP地址的程序
-    var exter_invoke_ip = "";
+    let exter_invoke_ip = "";
 
     //注意：
     //1.请慎重选择是否开启防钓鱼功能
@@ -221,21 +221,21 @@ router.get('/alipayInit', function (req, res) {
     //扩展功能参数——其他///
 
     //自定义参数，可存放任何内容（除=、&等特殊字符外），不会显示在页面上
-    var extra_common_param = "";
+    let extra_common_param = "";
 
     //默认买家支付宝账号
-    var buyer_email = "";
+    let buyer_email = "";
 
     //商品展示地址，要用http:// 格式的完整路径，不允许加?id=123这类自定义参数
-    // var show_url = "http://www.xxx.com/order/myorder.jsp";
-    var show_url = "localhost:8080/index";
+    // let show_url = "http://www.xxx.com/order/myorder.jsp";
+    let show_url = "localhost:8080/index";
 
     //扩展功能参数——分润(若要使用，请按照注释要求的格式赋值)//
 
     //提成类型，该值为固定值：10，不需要修改
-    var royalty_type = "";
+    let royalty_type = "";
     //提成信息集
-    var royalty_parameters = "";
+    let royalty_parameters = "";
     //注意：
     //与需要结合商户网站自身情况动态获取每笔交易的各分润收款账号、各分润金额、各分润说明。最多只能设置10条
     //各分润金额的总和须小于等于total_fee
@@ -247,7 +247,7 @@ router.get('/alipayInit', function (req, res) {
     //////////////////////////////////////////////////////////////////////////////////
 
     //把请求参数打包成数组
-    var sParaTemp = [];
+    let sParaTemp = [];
     sParaTemp.push(["payment_type", "1"]);
     sParaTemp.push(["out_trade_no", out_trade_no]);
     sParaTemp.push(["subject", subject]);
@@ -271,7 +271,7 @@ router.get('/alipayInit', function (req, res) {
      * @param sParaTemp 请求参数集合
      * @return String 表单提交HTML信息
      */
-    var create_direct_pay_by_user = function (sParaTemp) {
+    let create_direct_pay_by_user = function (sParaTemp) {
         //增加基本配置
         /* 基本配置
         * service 由用户自己选择哪种交易方式
@@ -296,18 +296,18 @@ router.get('/alipayInit', function (req, res) {
          * param strButtonName 确认按钮显示文字
          * @return String 提交表单HTML文本
          */
-        var buildURL = function (sParaTemp) {
+        let buildURL = function (sParaTemp) {
             /**
              * 生成要请求给支付宝的参数数组
              * @param sParaTemp 请求前的参数数组
              * @return Array 要请求的参数数组
              */
-            var buildRequestPara = function (sParaTemp) {
-                var sPara = [];
+            let buildRequestPara = function (sParaTemp) {
+                let sPara = [];
 
                 //除去数组中的空值和签名参数
-                for (var i1 = 0; i1 < sParaTemp.length; i1++) {
-                    var value = sParaTemp[i1];
+                for (let i1 = 0; i1 < sParaTemp.length; i1++) {
+                    let value = sParaTemp[i1];
                     if (value[1] === null || value[1] === "" || value[0] === "sign"
                         || value[0] === "sign_type") {
                         continue;
@@ -317,10 +317,10 @@ router.get('/alipayInit', function (req, res) {
                 sPara.sort();
 
                 //生成签名结果
-                var prestr = "";
+                let prestr = "";
                 //把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
-                for (var i2 = 0; i2 < sPara.length; i2++) {
-                    var obj = sPara[i2];
+                for (let i2 = 0; i2 < sPara.length; i2++) {
+                    let obj = sPara[i2];
                     if (i2 === sPara.length - 1) {
                         prestr = prestr + obj[0] + "=" + obj[1];
                     } else {
@@ -331,21 +331,21 @@ router.get('/alipayInit', function (req, res) {
 
                 //把拼接后的字符串再与安全校验码直接连接起来
                 prestr = prestr + AlipayConfig.key;
-                var crypto = require('crypto');
-                var mysign = crypto.createHash('md5').update(prestr, AlipayConfig.input_charset).digest("hex");
+                let crypto = require('crypto');
+                let mysign = crypto.createHash('md5').update(prestr, AlipayConfig.input_charset).digest("hex");
                 //签名结果与签名方式加入请求提交参数组中
                 sPara.push(["sign", mysign]);
                 sPara.push(["sign_type", AlipayConfig.sign_type]);
 
                 return sPara;
             };
-            var sPara = buildRequestPara(sParaTemp);
+            let sPara = buildRequestPara(sParaTemp);
 
-            var path = AlipayConfig.ALIPAY_PATH;
-            for (var i3 = 0; i3 < sPara.length; i3++) {
-                var obj = sPara[i3];
-                var name = obj[0];
-                var value = encodeURIComponent(obj[1]);
+            let path = AlipayConfig.ALIPAY_PATH;
+            for (let i3 = 0; i3 < sPara.length; i3++) {
+                let obj = sPara[i3];
+                let name = obj[0];
+                let value = encodeURIComponent(obj[1]);
                 if (i3 < (sPara.length - 1)) {
                     path = path + name + "=" + value + "&";
                 } else {
@@ -358,7 +358,7 @@ router.get('/alipayInit', function (req, res) {
         return buildURL(sParaTemp);
     };
     //构造函数，生成请求URL
-    var sURL = create_direct_pay_by_user(sParaTemp);
+    let sURL = create_direct_pay_by_user(sParaTemp);
     console.log(sURL);
     //向支付宝网关发出请求
     // requestUrl(AlipayConfig.ALIPAY_HOST, show_url, function (data) {
@@ -369,19 +369,19 @@ router.get('/alipayInit', function (req, res) {
 router.get('/payNotify', function (req, res) {
     //http://127.0.0.1:3000/paynotify?trade_no=2008102203208746&out_trade_no=3618810634349901&discount=-5&payment_type=1&subject=iphone%E6%89%8B%E6%9C%BA&body=Hello&price=10.00&quantity=1&total_fee=10.00&trade_status=TRADE_FINISHED&refund_status=REFUND_SUCCESS&seller_email=chao.chenc1%40alipay.com&seller_id=2088002007018916&buyer_id=2088002007013600&buyer_email=13758698870&gmt_create=2008-10-22+20%3A49%3A31&is_total_fee_adjust=N&gmt_payment=2008-10-22+20%3A49%3A50&gmt_close=2008-10-22+20%3A49%3A46&gmt_refund=2008-10-29+19%3A38%3A25&use_coupon=N&notify_time=2009-08-12+11%3A08%3A32&notify_type=%E4%BA%A4%E6%98%93%E7%8A%B6%E6%80%81%E5%90%8C%E6%AD%A5%E9%80%9A%E7%9F%A5%28trade_status_sync%29&notify_id=70fec0c2730b27528665af4517c27b95&sign_type=DSA&sign=_p_w_l_h_j0b_gd_aejia7n_ko4_m%252Fu_w_jd3_nx_s_k_mxus9_hoxg_y_r_lunli_pmma29_t_q%253D%253D&extra_common_param=%E4%BD%A0%E5%A5%BD%EF%BC%8C%E8%BF%99%E6%98%AF%E6%B5%8B%E8%AF%95%E5%95%86%E6%88%B7%E7%9A%84%E5%B9%BF%E5%91%8A%E3%80%82
     //获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表(以下仅供参考)//
-    var params = req.query;
+    let params = req.query;
 
 //    console.log(req.query());
-    var trade_no = req.query.trade_no;				//支付宝交易号
-    var order_no = req.query.out_trade_no;	        //获取订单号
-    var total_fee = req.query.total_fee;	        //获取总金额
-    var subject = req.query.subject;//商品名称、订单名称
-    var body = "";
+    let trade_no = req.query.trade_no;				//支付宝交易号
+    let order_no = req.query.out_trade_no;	        //获取订单号
+    let total_fee = req.query.total_fee;	        //获取总金额
+    let subject = req.query.subject;//商品名称、订单名称
+    let body = "";
     if (req.query.body !== null) {
         body = req.query.body;//商品描述、订单备注、描述
     }
-    var buyer_email = req.query.buyer_email;		//买家支付宝账号
-    var trade_status = req.query.trade_status;		//交易状态
+    let buyer_email = req.query.buyer_email;		//买家支付宝账号
+    let trade_status = req.query.trade_status;		//交易状态
     //获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表(以上仅供参考)//
     AlipayNotify.verity(params, function (result) {
         if (result) {
@@ -421,19 +421,19 @@ router.get('/payNotify', function (req, res) {
 });
 router.get('/payReturn', function (req, res) {
     //获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表(以下仅供参考)//
-    var params = req.query;
+    let params = req.query;
 
 //    console.log(req.query());
-    var trade_no = req.query.trade_no;				//支付宝交易号
-    var order_no = req.query.out_trade_no;	        //获取订单号
-    var total_fee = req.query.total_fee;	        //获取总金额
-    var subject = req.query.subject;//商品名称、订单名称
-    var body = "";
+    let trade_no = req.query.trade_no;				//支付宝交易号
+    let order_no = req.query.out_trade_no;	        //获取订单号
+    let total_fee = req.query.total_fee;	        //获取总金额
+    let subject = req.query.subject;//商品名称、订单名称
+    let body = "";
     if (req.query.body !== null) {
         body = req.query.body;//商品描述、订单备注、描述
     }
-    var buyer_email = req.query.buyer_email;		//买家支付宝账号
-    var trade_status = req.query.trade_status;		//交易状态
+    let buyer_email = req.query.buyer_email;		//买家支付宝账号
+    let trade_status = req.query.trade_status;		//交易状态
     //获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表(以上仅供参考)//
 
     console.log(trade_status);

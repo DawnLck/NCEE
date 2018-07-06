@@ -2,12 +2,12 @@
  * Mongoose Model
  * */
 require('./mongooseConnect');
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-var async = require('async');
+const mongoose = require('mongoose'),
+    Schema = mongoose.Schema,
+    async = require('async');
 
 /* 学校信息模式 */
-// var schoolSchema = new Schema({
+// let schoolSchema = new Schema({
 //     schoolId: Number,
 //     schoolCode: String,
 //     schoolName: String,
@@ -17,7 +17,7 @@ var async = require('async');
 // }, {
 //     versionKey: false //取消collection在初次建立时生成的_v内部版本数据属性
 // });
-var schoolSchema = new Schema({
+const schoolSchema = new Schema({
     itemIndex: Number, /* 序号 */
     schoolCode: String, /* 院校代码 */
     schoolName: String, /* 院校名称 */
@@ -41,7 +41,7 @@ var schoolSchema = new Schema({
 });
 
 /* 录取信息模式 */
-var admissionSchema = new Schema({
+const admissionSchema = new Schema({
     professionName: String, /* 专业名称 */
     professionClass: String, /* 专业类别 */
     professionCode: String, /* 专业代码 */
@@ -60,7 +60,7 @@ var admissionSchema = new Schema({
 });
 
 /* 一分一段表模式 */
-var score2rankSchema = new Schema({
+const score2rankSchema = new Schema({
     score: Number,
     subTotal: Number,
     grandTotal: Number
@@ -69,7 +69,7 @@ var score2rankSchema = new Schema({
 });
 
 /* 2017年计划表模式 */
-var plans2017Schema = new Schema({
+const plans2017Schema = new Schema({
     // itemIndex: Number, /* 序号 */
     schoolCode: String, /* 院校代码 */
     schoolName: String, /* 院校名称 */
@@ -111,7 +111,7 @@ var plans2017Schema = new Schema({
 });
 
 /*合表的模式*/
-// var plansConformedSchema_2017 = new Schema({
+// let plansConformedSchema_2017 = new Schema({
 //     // itemIndex: Number, /* 序号 */
 //     schoolCode: String, /* 院校代码 */
 //     schoolName: String, /* 院校名称 */
@@ -147,7 +147,7 @@ var plans2017Schema = new Schema({
 //     versionKey: false
 // });
 
-var plansConformedSchema = new Schema({
+const plansConformedSchema = new Schema({
     itemIndex: Number, /* 序号 */
     schoolCode: String, /* 院校代码 */
     schoolName: String, /* 院校名称 */
@@ -187,7 +187,7 @@ var plansConformedSchema = new Schema({
 });
 
 //标准精简模式
-var standardReducedSchema = new Schema({
+const standardReducedSchema = new Schema({
     // itemIndex: Number, /* 序号 */
     schoolCode: String, /* 院校代码 */
     schoolName: String, /* 院校名称 */
@@ -216,7 +216,7 @@ var standardReducedSchema = new Schema({
 /*  NCEE-Data
  *  2017-8-26 与plansConformedSchema保持一致
  *  最终确定下来的数据保存格式，包含当年的数据和往年的五项数据 */
-var ncee_standard_schema = new Schema({
+const ncee_standard_schema = new Schema({
     itemIndex: Number, /* 序号 */
     schoolCode: String, /* 院校代码 */
     schoolName: String, /* 院校名称 */
@@ -257,8 +257,8 @@ var ncee_standard_schema = new Schema({
 
 exports.saveAdmissionArray = function (arr, collName, callback) {
     if (arr.length) {
-        var arrLength = arr.length;
-        var targetModel = mongoose.model(collName, admissionSchema, collName);
+        let arrLength = arr.length;
+        let targetModel = mongoose.model(collName, admissionSchema, collName);
 
         console.log('CollName:' + collName + ' ArrayLength: ' + arrLength);
 
@@ -268,8 +268,8 @@ exports.saveAdmissionArray = function (arr, collName, callback) {
             }
         });
 
-        for (var i = 0; i < arrLength; i++) {
-            var item = {
+        for (let i = 0; i < arrLength; i++) {
+            let item = {
                 professionName: arr[i][0], /* 专业名称 */
                 professionClass: arr[i][1], /* 专业类别 */
                 professionCode: arr[i][9], /* 专业代码 */
@@ -305,8 +305,8 @@ exports.saveAdmissionArray = function (arr, collName, callback) {
 exports.saveSchoolArray = function (arr, collName, callback) {
     if (arr.length) {
 
-        var arrLength = arr.length;
-        var targetModel = mongoose.model(collName, schoolSchema, collName);
+        let arrLength = arr.length;
+        let targetModel = mongoose.model(collName, schoolSchema, collName);
 
         console.log('CollName:' + collName + ' ArrayLength: ' + arrLength);
 
@@ -317,8 +317,8 @@ exports.saveSchoolArray = function (arr, collName, callback) {
         });
 
         // console.log(arr[0]);
-        for (var i = 0; i < arrLength; i++) {
-            // var item = {
+        for (let i = 0; i < arrLength; i++) {
+            // let item = {
             //     schoolId: parseInt(arr[i][0]),
             //     schoolCode: arr[i][1],
             //     schoolName: arr[i][2],
@@ -326,7 +326,7 @@ exports.saveSchoolArray = function (arr, collName, callback) {
             //     professionCode: arr[i][4],
             //     professionName: arr[i][5]
             // };
-            var item = {
+            let item = {
                 itemIndex: arr[i][0], /* 序号 */
                 schoolCode: arr[i][1], /* 院校代码 */
                 schoolName: arr[i][2], /* 院校名称 */
@@ -361,8 +361,8 @@ exports.saveSchoolArray = function (arr, collName, callback) {
 
 exports.saveScore2Rank = function (arr, collName, callback) {
     if (arr.length) {
-        var arrLength = arr.length;
-        var targetModel = mongoose.model(collName, score2rankSchema, collName);
+        let arrLength = arr.length;
+        let targetModel = mongoose.model(collName, score2rankSchema, collName);
 
         console.log('CollName:' + collName + ' ArrayLength: ' + arrLength);
 
@@ -372,8 +372,8 @@ exports.saveScore2Rank = function (arr, collName, callback) {
             }
         });
 
-        for (var i = 0; i < arrLength; i++) {
-            var item = {
+        for (let i = 0; i < arrLength; i++) {
+            let item = {
                 /* 分数、小计、累计（名次） */
                 score: arr[i][0],
                 subTotal: arr[i][1],
@@ -401,8 +401,8 @@ exports.saveScore2Rank = function (arr, collName, callback) {
 exports.savePlans2017 = function (arr, collName, callback) {
     if (arr.length) {
 
-        var arrLength = arr.length;
-        var targetModel = mongoose.model(collName, plans2017Schema, collName);
+        let arrLength = arr.length;
+        let targetModel = mongoose.model(collName, plans2017Schema, collName);
 
         console.log('CollName:' + collName + ' ArrayLength: ' + arrLength);
 
@@ -413,8 +413,8 @@ exports.savePlans2017 = function (arr, collName, callback) {
         });
 
         // console.log(arr[0]);
-        for (var i = 0; i < arrLength; i++) {
-            var item = {
+        for (let i = 0; i < arrLength; i++) {
+            let item = {
                 // itemIndex: Number, /* 序号 */
                 schoolCode: arr[i][0], /* 院校代码 */
                 schoolName: arr[i][1], /* 院校名称 */
@@ -460,7 +460,7 @@ exports.savePlans2017 = function (arr, collName, callback) {
 
 exports.savePlansItem2017 = function (item, collName) {
     if (item) {
-        var targetModel = mongoose.model(collName, plans2017Schema, collName);
+        let targetModel = mongoose.model(collName, plans2017Schema, collName);
 
         new targetModel(item).save(function (err) {
             if (err) {
@@ -475,7 +475,7 @@ exports.savePlansItem2017 = function (item, collName) {
 
 exports.savePlansConformedItem = function (item, collName) {
     if (item) {
-        var targetModel = mongoose.model(collName, plansConformedSchema, collName);
+        let targetModel = mongoose.model(collName, plansConformedSchema, collName);
 
         new targetModel(item).save(function (err) {
             if (err) {
@@ -490,7 +490,7 @@ exports.savePlansConformedItem = function (item, collName) {
 
 exports.savePlansConformedItemAsync = function (item, data2016, collName) {
     if (item && data2016) {
-        var tem = {
+        let tem = {
             schoolCode: item.schoolCode, /* 院校代码 */
             schoolName: item.schoolName, /* 院校名称 */
             schoolCategoryCode: item.schoolCategoryCode, /* 院校类别代码 */
@@ -533,7 +533,7 @@ exports.savePlansConformedItemAsync = function (item, data2016, collName) {
         // console.log(item);
         // console.log(data2016[0]);
 
-        var targetModel = mongoose.model(collName, plansConformedSchema, collName);
+        let targetModel = mongoose.model(collName, plansConformedSchema, collName);
 
         new targetModel(tem).save(function (err) {
             if (err) {
@@ -551,7 +551,7 @@ exports.saveConformedOne = function (item, collName, callback) {
     if (item) {
         // console.log(item);
 
-        var targetModel = mongoose.model(collName, plansConformedSchema, collName);
+        let targetModel = mongoose.model(collName, plansConformedSchema, collName);
         new targetModel({
             itemIndex: item.itemIndex, /* 序号 */
             schoolCode: item.schoolCode, /* 院校代码 */
@@ -604,8 +604,8 @@ exports.saveConformedOne = function (item, collName, callback) {
 
 exports.saveConformedData = function (arr, collName, callback) {
     if (arr.length) {
-        var arrLength = arr.length;
-        var targetModel = mongoose.model(collName, plansConformedSchema, collName);
+        let arrLength = arr.length;
+        let targetModel = mongoose.model(collName, plansConformedSchema, collName);
 
         console.log('CollName:' + collName + ' ArrayLength: ' + arrLength);
 
@@ -618,11 +618,11 @@ exports.saveConformedData = function (arr, collName, callback) {
 
 
         // console.log(arr[0]);
-        for (var i = 0; i < arrLength; i++) {
+        for (let i = 0; i < arrLength; i++) {
             if(!arr[i][0]){
                 continue;
             }
-            var item = {
+            let item = {
                 itemIndex: arr[i][0], /* 序号 */
                 schoolCode: arr[i][1], /* 院校代码 */
                 schoolName: arr[i][2], /* 院校名称 */
@@ -675,8 +675,8 @@ exports.saveConformedData = function (arr, collName, callback) {
 };
 
 exports.saveStandardReducedOne = function (arr, collName, callback) {
-    var targetModel = mongoose.model(collName, standardReducedSchema, collName);
-    var item = {
+    let targetModel = mongoose.model(collName, standardReducedSchema, collName);
+    let item = {
         schoolCode: arr[1], /* 院校代码 */
         schoolName: arr[2], /* 院校名称 */
 
@@ -715,33 +715,39 @@ exports.getAdmissionData = function (query, collName, callback) {
     // console.log(query);
     // console.log(collName);
 
-    var admissionModel = mongoose.model(collName, admissionSchema);
+    let admissionModel = mongoose.model(collName, admissionSchema);
     admissionModel.find(query, function (err, data) {
         callback(data);
     });
 };
 
 exports.getSchoolsData = function (query, collName, callback) {
-    var schoolsModel = mongoose.model(collName, admissionSchema);
+    let schoolsModel = mongoose.model(collName, admissionSchema);
     schoolsModel.find(query, function (err, data) {
         callback(data);
     });
 };
 
 exports.getConformedData = function (query, fields, sorts, collName, callback) {
-    var conformedModel = mongoose.model(collName, plansConformedSchema);
+    console.log('Get conformed model...');
+
+    console.log(query);
+    console.log(fields);
+    console.log(sorts);
+
+    let conformedModel = mongoose.model(collName, plansConformedSchema);
     conformedModel.find(query, fields, sorts, function (err, data) {
-        // console.log('Get conformed model...');
-        // console.log(query);
-        // console.log(fields);
-        // console.log(sorts);
-        // console.log(data);
+        console.log(data);
         callback(err, data);
     });
 };
 
+exports.getConformedDataAsync = async function(query, fields, sorts, collName){
+
+};
+
 exports.getOneConformedData = function (query, fields, sorts, collName, src, callback) {
-    var conformedModel = mongoose.model(collName, plansConformedSchema);
+    let conformedModel = mongoose.model(collName, plansConformedSchema);
     conformedModel.findOne(query, fields, sorts, function (err, data) {
         console.log('Get conformed model...');
         // console.log(query);
@@ -754,7 +760,7 @@ exports.getOneConformedData = function (query, fields, sorts, collName, src, cal
 
 exports.getRanking = function (score, collName, callback) {
     // console.log('RankScore: ' + score);
-    var rankingModel = mongoose.model(collName, score2rankSchema);
+    let rankingModel = mongoose.model(collName, score2rankSchema);
     rankingModel.find({'score': score}, function (err, data) {
         // console.log(data);
         callback(data);
@@ -763,7 +769,7 @@ exports.getRanking = function (score, collName, callback) {
 
 exports.getPlans2017 = function (collName, callback) {
     // console.log('RankScore: '+ score);
-    var plans2017Model = mongoose.model(collName, plans2017Schema);
+    let plans2017Model = mongoose.model(collName, plans2017Schema);
     plans2017Model.find({}, function (err, data) {
         // console.log(data);
         if (err) {
@@ -774,7 +780,7 @@ exports.getPlans2017 = function (collName, callback) {
 };
 
 exports.getPlans2016 = function (item, query, collName, callback) {
-    var plans2016Model = mongoose.model(collName, schoolSchema);
+    let plans2016Model = mongoose.model(collName, schoolSchema);
     plans2016Model.find(query, function (err, data) {
         // console.log(data);
         callback(item, data);
@@ -782,19 +788,19 @@ exports.getPlans2016 = function (item, query, collName, callback) {
 };
 
 exports.conformDataAB = function (collName_A, collName_B, collection_A, collection_B, collection_C) {
-    var plansModelA = mongoose.model(collName_A, plans2017Schema);
-    var plansModelB = mongoose.model(collName_B, schoolSchema);
-    var collModelA = mongoose.model(collection_A, plans2017Schema);
-    var collModelB = mongoose.model(collection_B, plans2017Schema);
-    var collModelC = mongoose.model(collection_C, plans2017Schema);
+    let plansModelA = mongoose.model(collName_A, plans2017Schema);
+    let plansModelB = mongoose.model(collName_B, schoolSchema);
+    let collModelA = mongoose.model(collection_A, plans2017Schema);
+    let collModelB = mongoose.model(collection_B, plans2017Schema);
+    let collModelC = mongoose.model(collection_C, plans2017Schema);
 
     plansModelA.find({}, function (err, data2017) {
         console.log(data2017.length);
-        var itemIndex = 0;
+        let itemIndex = 0;
         for (; itemIndex < 1000; itemIndex++) {
-            var item = data2017[itemIndex];
+            let item = data2017[itemIndex];
             if (item.schoolName && item.professionName) {
-                var query = {
+                let query = {
                     $and: [{
                         schoolName: item.schoolName
                     }, {
@@ -803,7 +809,7 @@ exports.conformDataAB = function (collName_A, collName_B, collection_A, collecti
                 };
                 (function (item) {
                     plansModelB.find(query, function (err, data2016) {
-                        var tem2017 = {
+                        let tem2017 = {
                             schoolCode: item.schoolCode, /* 院校代码 */
                             schoolName: item.schoolName, /* 院校名称 */
                             schoolCategoryCode: item.schoolCategoryCode, /* 院校类别代码 */
@@ -832,7 +838,7 @@ exports.conformDataAB = function (collName_A, collName_B, collection_A, collecti
                         };
                         if (data2016) {
                             if (data2016[0]) {
-                                var tem = {
+                                let tem = {
                                     schoolCode: item.schoolCode, /* 院校代码 */
                                     schoolName: item.schoolName, /* 院校名称 */
                                     schoolCategoryCode: item.schoolCategoryCode, /* 院校类别代码 */
@@ -893,12 +899,12 @@ exports.conformDataAB = function (collName_A, collName_B, collection_A, collecti
 };
 
 exports.conformDataAsync = function (collName_A, collName_B, collection_A, collection_B, collection_C) {
-    var plansModelA = mongoose.model(collName_A, plans2017Schema);
-    var plansModelB = mongoose.model(collName_B, schoolSchema);
-    var collModelA = mongoose.model(collection_A, plans2017Schema);
-    var collModelB = mongoose.model(collection_B, plans2017Schema);
-    var collModelC = mongoose.model(collection_C, plans2017Schema);
-    var concurrencyCount = 0;
+    let plansModelA = mongoose.model(collName_A, plans2017Schema);
+    let plansModelB = mongoose.model(collName_B, schoolSchema);
+    let collModelA = mongoose.model(collection_A, plans2017Schema);
+    let collModelB = mongoose.model(collection_B, plans2017Schema);
+    let collModelC = mongoose.model(collection_C, plans2017Schema);
+    let concurrencyCount = 0;
 
     plansModelA.find({}, function (err, data2017) {
         console.log(data2017.length);
@@ -907,7 +913,7 @@ exports.conformDataAsync = function (collName_A, collName_B, collection_A, colle
             // fetchUrl(url, callback);
 
             if (item.schoolName && item.professionName) {
-                var query = {
+                let query = {
                     $and: [{
                         schoolName: item.schoolName
                     }, {
@@ -916,7 +922,7 @@ exports.conformDataAsync = function (collName_A, collName_B, collection_A, colle
                 };
                 (function (item) {
                     plansModelB.find(query, function (err, data2016) {
-                        var tem2017 = {
+                        let tem2017 = {
                             schoolCode: item.schoolCode, /* 院校代码 */
                             schoolName: item.schoolName, /* 院校名称 */
                             schoolCategoryCode: item.schoolCategoryCode, /* 院校类别代码 */
@@ -945,7 +951,7 @@ exports.conformDataAsync = function (collName_A, collName_B, collection_A, colle
                         };
                         if (data2016) {
                             if (data2016[0]) {
-                                var tem = {
+                                let tem = {
                                     schoolCode: item.schoolCode, /* 院校代码 */
                                     schoolName: item.schoolName, /* 院校名称 */
                                     schoolCategoryCode: item.schoolCategoryCode, /* 院校类别代码 */
@@ -995,7 +1001,7 @@ exports.conformDataAsync = function (collName_A, collName_B, collection_A, colle
                             new collModelC(tem2017).save();
                         }
 
-                        var delay = parseInt((Math.random() * 10000000) % 2000, 10);
+                        let delay = parseInt((Math.random() * 10000000) % 2000, 10);
 
                         concurrencyCount++;
                         console.log('现在的并发数是', concurrencyCount, '，正在抓取的是', item.schoolName, '耗时' + delay + '毫秒');
