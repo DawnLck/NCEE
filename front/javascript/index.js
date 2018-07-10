@@ -10,9 +10,9 @@ const app = new Vue({
             preference1: '计算机类',
             preference2: '经济学类',
             preference3: '机械类',
-            province: [],
+            province: ['浙江'],
             schoolLevel_985: false,
-            schoolLevel_211: true,
+            schoolLevel_211: false,
             ranking: 10000,
             score: 630,
             floatRange: 5000,
@@ -113,6 +113,15 @@ const app = new Vue({
                 {value: 71, text: '台湾省', alt: '台湾'},
                 {value: 81, text: '香港特别行政区', alt: '香港'},
                 {value: 82, text: '澳门特别行政区', alt: '澳门'}
+            ],
+            floatRange: [
+                500,
+                1000,
+                2000,
+                5000,
+                10000,
+                20000,
+                '不限'
             ]
         },
         autoRe: true,           //是否智能推荐
@@ -139,11 +148,11 @@ const app = new Vue({
         hello: function () {
             console.log('Using Vue FrameWork...');
             console.log('Category Length: ' + this.options.professionCategory.length);
-            $('.preference').selectpicker({
-                liveSearch: true,
-                liveSearchPlaceholder: '请输入你要查找的专业...',
-                size: 5
-            });
+            // $('.preference').selectpicker({
+            //     liveSearch: true,
+            //     liveSearchPlaceholder: '请输入你要查找的专业...',
+            //     size: 5
+            // });
         },
 
         userLogin: function () {

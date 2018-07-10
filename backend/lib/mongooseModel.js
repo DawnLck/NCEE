@@ -767,6 +767,13 @@ exports.getRanking = function (score, collName, callback) {
     });
 };
 
+exports.getRankingAsync = async function(score, collName){
+    let rankingModel = mongoose.model(collName, score2rankSchema);
+    rankingModel.find({'score': score}, function (err, data) {
+       return data;
+    });
+};
+
 exports.getPlans2017 = function (collName, callback) {
     // console.log('RankScore: '+ score);
     let plans2017Model = mongoose.model(collName, plans2017Schema);

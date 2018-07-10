@@ -1,0 +1,101 @@
+/*
+ index. scss
+*/
+
+$color_manual_1: #e65761;
+$color_manual_2: #E56373;
+$color_manual_3: #EF9A9A;
+
+$color_auto_1: #5CA7BC;
+$color_auto_2: #B0D9EF;
+$color_auto_3: #C6EDEA;
+
+#ncee-range .radio {
+  display: inline-block;
+}
+
+#ncee-candidates {
+  .part_3 {
+    background-color: $color_manual_3;
+  }
+  .part_2 {
+    background-color: $color_manual_2;
+  }
+  .part_1 {
+    background-color: $color_manual_1;
+  }
+}
+
+#ncee-resultList {
+  .preference_3 {
+    background-color: $color_auto_3;
+  }
+  .preference_2 {
+    background-color: $color_auto_2;
+  }
+  .preference_1 {
+    background-color: $color_auto_1;
+  }
+}
+
+#ncee-preferences {
+  .col-4 {
+    padding: 0;
+    margin: 0;
+  }
+}
+
+.table > tbody > tr > td {
+  vertical-align: middle;
+  height: 60px;
+  padding-top: 20px;
+  overflow: hidden;
+  /*line-height: 3;*/
+}
+
+.table {
+  thead tr {
+    display: flex;
+  }
+  .checkbox {
+    margin: 0;
+  }
+  .btn {
+    top: -8px;
+    padding: 0.4em 0.4em;
+  }
+}
+
+.table > tbody > tr {
+  display: flex;
+}
+
+#ncee-login {
+  display: inline-block;
+  text-align: -webkit-left;
+  margin-top: 20px;
+}
+
+.ncee-class-h1 {
+  color: #fff;
+  background-color: #597cd1;
+}
+
+.ncee-class-h1, h1 {
+  margin: 10px 0;
+}
+
+form {
+  .row {
+    margin: 1rem 0;
+  }
+}
+
+label.col-form-label{
+  width: 8rem;
+  justify-content: flex-start;
+}
+
+.checkbox {
+  margin: 1rem;
+}

@@ -1,0 +1,20 @@
+/* Global.scss */
+.text-left {
+  text-align: left; }
+
+.text-right {
+  text-align: right; }
+
+.text-center {
+  text-align: center; }
+
+form label, form legend {
+  display: inline-block;
+  font-size: 1.2rem !important;
+  font-family: "Microsoft JhengHei", "Microsoft YaHei", "Arial Narrow", Arial, sans-serif; }
+
+@media (min-width: 1800px) {
+  .container {
+    max-width: 1600px; } }
+
+/*# sourceMappingURL=global.css.map */

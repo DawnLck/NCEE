@@ -6,9 +6,9 @@ const mongoModel = require('../lib/mongooseModel'),
     xlsx = require('node-xlsx'),
     async = require('async');
 
-// let conformedPlansTable = 'plans_conformed_2017';
-// let conformedPlansTable = 'plans_2nd_conformed_2017';
-const conformedPlansTable = require('../../config').conformedData;
+const conformedPlansTable = require('../../config').conformedData,
+    score2Rank = require('../../config').score2rank;
+
 console.log(conformedPlansTable);
 
 exports.readSchoolsExcel = function (xlsxName, collName, callback) {
@@ -155,7 +155,7 @@ let autoRecommendPartByScore = function (preferences, score, floatRange, provinc
     /* 先从一段一份表里获得自己的分数对应的名次 */
     // console.log('scoreA:'+score);
     score = score > 686 ? 686 : parseInt(score);
-    mongoModel.getRanking(score, 'score2ranks', function (data) {
+    mongoModel.getRanking(score, score2Rank, function (data) {
         data = data ? data : [];
 
         let rankingNum = parseInt(data[0].grandTotal);

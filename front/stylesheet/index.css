@@ -1,76 +1,65 @@
-@media screen and (min-width: 1700px){
-    .container {
-        width: 1500px;
-    }
-}
-
-th {
-    text-align: center;
-}
-
-.form-group{
-    display: inline-block;
-}
-
+/*
+ index. scss
+*/
 #ncee-range .radio {
-    display: inline-block;
-}
+  display: inline-block; }
 
-.checkbox{
-    display: inline-block;
-}
+#ncee-candidates .part_3 {
+  background-color: #EF9A9A; }
+#ncee-candidates .part_2 {
+  background-color: #E56373; }
+#ncee-candidates .part_1 {
+  background-color: #e65761; }
 
-#ncee-candidates .part_3{
-    background-color: #C6EDEA;
-}
-#ncee-candidates .part_2{
-    background-color: #B0D9EF;
-}
-#ncee-candidates .part_1{
-    background-color: #5CA7BC;
-}
-#ncee-resultList .preference_3{
-    background-color: #EF9A9A;
-}
-#ncee-resultList .preference_2{
-    background-color: #E57373;
-}
-#ncee-resultList .preference_1{
-    background-color: #EF5350;
-}
+#ncee-resultList .preference_3 {
+  background-color: #C6EDEA; }
+#ncee-resultList .preference_2 {
+  background-color: #B0D9EF; }
+#ncee-resultList .preference_1 {
+  background-color: #5CA7BC; }
+
+#ncee-preferences .col-4 {
+  padding: 0;
+  margin: 0; }
 
 .table > tbody > tr > td {
-    vertical-align: middle;
-    height: 60px;
-    padding-top: 20px;
-    overflow: hidden;
-    /*line-height: 3;*/
-}
-.table thead tr{
-    padding-right: 20px;
-    display: flex;
-}
-.table .checkbox {
-    margin: 0;
-}
+  vertical-align: middle;
+  height: 60px;
+  padding-top: 20px;
+  overflow: hidden;
+  /*line-height: 3;*/ }
 
+.table thead tr {
+  display: flex; }
+.table .checkbox {
+  margin: 0; }
 .table .btn {
-    top: -8px;
-    padding:0.4em 0.4em;
-}
+  top: -8px;
+  padding: 0.4em 0.4em; }
 
 .table > tbody > tr {
-    display: flex;
-}
-#ncee-login{
-    display: inline-block;
-    text-align: -webkit-left;
-    margin-top: 20px;
-}
-.ncee-class-h1{
-    color: #fff;
-    background-color: #597cd1;
-}
-.ncee-class-h1, h1{
-    margin: 10px 0;
-}
+  display: flex; }
+
+#ncee-login {
+  display: inline-block;
+  text-align: -webkit-left;
+  margin-top: 20px; }
+
+.ncee-class-h1 {
+  color: #fff;
+  background-color: #597cd1; }
+
+.ncee-class-h1, h1 {
+  margin: 10px 0; }
+
+form .row {
+  margin: 1rem 0; }
+
+label.col-form-label {
+  width: 8rem;
+  justify-content: flex-start; }
+
+.checkbox {
+  margin: 1rem; }
+
+/*# sourceMappingURL=index.css.map */
