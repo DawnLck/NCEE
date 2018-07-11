@@ -251,7 +251,7 @@ const ncee_standard_schema = new Schema({
     pastRankingNumber: Number, /* 以往最低名次号 */
     pastBatch: String, /* 以往批次 */
     pastAdmissionCount: Number      /* 以往录取人数 */
-},{
+}, {
     versionKey: false
 });
 
@@ -616,10 +616,9 @@ exports.saveConformedData = function (arr, collName, callback) {
         });
 
 
-
         // console.log(arr[0]);
         for (let i = 0; i < arrLength; i++) {
-            if(!arr[i][0]){
+            if (!arr[i][0]) {
                 continue;
             }
             let item = {
@@ -742,7 +741,7 @@ exports.getConformedData = function (query, fields, sorts, collName, callback) {
     });
 };
 
-exports.getConformedDataAsync = async function(query, fields, sorts, collName){
+exports.getConformedDataAsync = async function (query, fields, sorts, collName) {
 
 };
 
@@ -767,11 +766,9 @@ exports.getRanking = function (score, collName, callback) {
     });
 };
 
-exports.getRankingAsync = async function(score, collName){
+exports.getRankingAsync = async function (score, collName) {
     let rankingModel = mongoose.model(collName, score2rankSchema);
-    rankingModel.find({'score': score}, function (err, data) {
-       return data;
-    });
+    return rankingModel.find({'score': score}).exec();
 };
 
 exports.getPlans2017 = function (collName, callback) {

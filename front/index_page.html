@@ -25,8 +25,10 @@
                     <div id="ncee-score" class="col-6 form-group">
                         <label class="col-form-label" for="nceeScore">高考分数：</label>
                         <input type="text" class="form-control col-4" id="nceeScore"
-                               v-model="selectRange.score" placeholder="请输入高考分数...">
-                        <!--<small id="help_nceeScore" class="form-text text-muted">请输入你今年的高考分数</small>-->
+                               v-model="selectRange.score" placeholder="请输入高考分数..." @change="score2rank()">
+                        <small id="help_nceeScore" class="form-text text-muted col-4">预测分数对应的排名为
+                            <span>{{selectRange.ranking}}</span>
+                        </small>
                     </div>
                 </div>
                 <div class="row col-12 text-left">
@@ -37,6 +39,12 @@
                             <option v-for="item in options.province" v-text="item.text"
                                     v-bind:value="item.alt"></option>
                         </select>
+                        <small id="help_nceeProvince" class="form-text text-muted col-4">使用Ctrl选择多个城市</small>
+                    </div>
+                    <div class="col-6">
+                        <ul class="form-group">
+                            <li class="col-3" v-for="item in selectRange.province" v-text="item"></li>
+                        </ul>
                     </div>
                 </div>
                 <div class="row col-12 text-left">
@@ -82,9 +90,10 @@
                     <div id="ncee-range" class="col-8 form-group">
                         <label class="pt-0">浮动范围: </label>
                         <div class="col-8">
-                            <div class="custom-control custom-radio custom-control-inline" v-for="item in options.floatRange">
+                            <div class="custom-control custom-radio custom-control-inline"
+                                 v-for="item in options.floatRange">
                                 <input class="custom-control-input" type="radio" name="gridRadios" :id="'radio_'+item"
-                                       :value="item" checked="" >
+                                       :value="item" checked="">
                                 <label class="custom-control-label" :for="'radio_'+item">
                                     {{item}}
                                 </label>
@@ -112,7 +121,8 @@
                     <div id="ncee-subjects" class="col-lg-8 form-group">
                         <label class="pt-0">选修科目：</label>
                         <div v-for="item in selectRange.subjects" class="checkbox custom-control custom-checkbox">
-                            <input type="checkbox" v-bind:id="item.id" v-model="item.selected" class="custom-control-input"/>
+                            <input type="checkbox" v-bind:id="item.id" v-model="item.selected"
+                                   class="custom-control-input"/>
                             <label class="custom-control-label" v-bind:for="item.id">{{item.subject}}</label>
                         </div>
                     </div>

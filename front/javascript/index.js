@@ -13,7 +13,7 @@ const app = new Vue({
             province: ['浙江'],
             schoolLevel_985: false,
             schoolLevel_211: false,
-            ranking: 10000,
+            ranking: 16683,
             score: 630,
             floatRange: 5000,
             bias: 15,
@@ -219,9 +219,9 @@ const app = new Vue({
 
         autoRecommend: function () {
             // console.log('11111'+this.selectRange.province);
-            if(this.selectRange.province.length < 1){
+            if (this.selectRange.province.length < 1) {
                 window.alert('请选择省的区域！');
-            }else{
+            } else {
                 this.clearAll();
                 this.autoRe = true;
                 if (this.selectRange.score < 359) {
@@ -372,6 +372,19 @@ const app = new Vue({
             document.body.appendChild(link); // Required for FF
             link.click();
             document.body.removeChild(link)
+        },
+
+        score2rank: function () {
+            console.log('score2rank');
+            let score = parseInt(this.selectRange.score);
+            if (score > 343 && score < 689) {
+                $.get('/conversion/getScore2Rank', {'score': score}, function (data) {
+                    console.log(data.rank);
+                    app.$data.selectRange.ranking = parseInt(data.rank);
+                })
+            }else{
+                this.selectRange.ranking = 0;
+            }
         }
     }
 });

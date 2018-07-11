@@ -5,7 +5,8 @@ const express = require('express'),
     mongooseModel = require('./backend/lib/mongooseModel'),
 
     alipayRoute = require('./backend/routes/alipayRoute'),
-    recommedRoute = require('./backend/routes/recommend'),
+    recommendRoute = require('./backend/routes/recommend'),
+    conversionRoute = require('./backend/routes/conversion'),
 
     urlencodedParser = bodyParser.urlencoded({extended: false});
 
@@ -13,7 +14,8 @@ let app = express();
 app.use(express.static('front'));
 app.use(express.static('front/index'));
 app.use('/alipayRoute', alipayRoute);
-app.use('/recommend', recommedRoute);
+app.use('/recommend', recommendRoute);
+app.use('/conversion', conversionRoute);
 
 app.get('/', function (req, res) {
     // res.sendFile('./front/login.html');
