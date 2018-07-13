@@ -12,7 +12,10 @@ console.log(DB_DatabasePath);
 mongoose.set('debug', false);
 
 /*mongoose会缓存命令，只要connect成功，处于其前其后的命令都会被执行，connect命令也就无所谓放哪里*/
-mongoose.connect(DB_DatabasePath, { useNewUrlParser: true });
+mongoose.connect(DB_DatabasePath, {
+    // useNewUrlParser: true,
+    useMongoClient: true
+});
 const db = mongoose.connection;
 
 db.on("error", function (error) {

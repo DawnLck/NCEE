@@ -34,15 +34,21 @@
                 <div class="row col-12 text-left">
                     <div id="ncee-province" class="col-6 form-group">
                         <label for="nceeProvince" class="col-form-label">学校地域：</label>
-                        <select class="form-control col-4" id="nceeProvince"
+                        <select class="form-control col-4" id="nceeProvince" style="height: 14rem;"
                                 multiple data-actions-box="true" v-model="selectRange.province">
                             <option v-for="item in options.province" v-text="item.text"
                                     v-bind:value="item.alt"></option>
                         </select>
-                        <small id="help_nceeProvince" class="form-text text-muted col-4">使用Ctrl选择多个城市</small>
+                        <small id="help_nceeProvince" class="form-text text-muted col-3">使用Ctrl选择多个城市</small>
                     </div>
-                    <div class="col-6">
-                        <ul class="form-group">
+                    <div id="ncee-province-select" class="col-2">
+                        <button type="button" class="btn btn-outline-primary" @click="provinceSelect(0)">全选</button>
+                        <button type="button" class="btn btn-outline-primary" @click="provinceSelect(1)">江浙沪</button>
+                        <button type="button" class="btn btn-outline-primary" @click="provinceSelect(2)">北上广深</button>
+                        <button type="button" class="btn btn-outline-primary" @click="provinceSelect(3)">西部学区</button>
+                    </div>
+                    <div class="col-4">
+                        <ul class="form-group select-result">
                             <li class="col-3" v-for="item in selectRange.province" v-text="item"></li>
                         </ul>
                     </div>

@@ -114,6 +114,12 @@ const app = new Vue({
                 {value: 81, text: '香港特别行政区', alt: '香港'},
                 {value: 82, text: '澳门特别行政区', alt: '澳门'}
             ],
+            provinceSelect: {
+              allArea:["北京", "天津", "河北", "山西", "内蒙古", "辽宁", "吉林", "黑龙江", "上海", "江苏", "浙江", "安徽", "福建", "江西", "山东", "河南", "湖北", "湖南", "广东", "广西", "海南", "重庆", "四川", "贵州", "云南", "西藏", "陕西", "甘肃", "青海", "宁夏", "新疆", "台湾", "香港", "澳门"],
+              jzh: ['江苏', '浙江', '上海'],
+              bsgs:['北京', '上海','广州','深圳'],
+              west:['湖北', '重庆', '四川' ,'湖南']
+            },
             floatRange: [
                 500,
                 1000,
@@ -384,6 +390,26 @@ const app = new Vue({
                 })
             }else{
                 this.selectRange.ranking = 0;
+            }
+        },
+
+        provinceSelect: function (value) {
+            let select = this.options.provinceSelect;
+            switch(value){
+                case 0:
+                    this.selectRange.province = select.allArea;
+                    break;
+                case 1:
+                    this.selectRange.province = select.jzh;
+                    break;
+                case 2:
+                    this.selectRange.province = select.bsgs;
+                    break;
+                case 3:
+                    this.selectRange.province = select.west;
+                    break;
+                default:
+                    break;
             }
         }
     }

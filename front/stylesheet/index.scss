@@ -45,6 +45,18 @@ $color_auto_3: #C6EDEA;
   }
 }
 
+#ncee-province-select{
+  button{
+    margin: 2px 0;
+  }
+}
+
+.select-result{
+  li{
+    white-space: nowrap;
+  }
+}
+
 .table > tbody > tr > td {
   vertical-align: middle;
   height: 60px;
