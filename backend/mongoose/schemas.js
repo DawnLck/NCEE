@@ -48,10 +48,10 @@ schemas.finals = new Schema({
 
     past: [
         {
-            year: String,/* 以往平均分 */
-           average: Number,/* 以往最低分 */
-            ranking: Number,/* 以往最低名次号 */
-            batch: String,/* 以往批次 */
+            year: String, /* 以往平均分 */
+            average: Number, /* 以往最低分 */
+            ranking: Number, /* 以往最低名次号 */
+            batch: String, /* 以往批次 */
             admission: String  /* 以往录取人数 */
         }
     ]
