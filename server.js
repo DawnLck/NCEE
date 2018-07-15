@@ -1,12 +1,11 @@
 const express = require('express'),
     bodyParser = require('body-parser'),
-    config = require('./config'),
-    mongoInit = require('./backend/init/mongoInit'),
-    mongooseModel = require('./backend/lib/mongooseModel'),
 
     alipayRoute = require('./backend/routes/alipayRoute'),
     recommendRoute = require('./backend/routes/recommend'),
     conversionRoute = require('./backend/routes/conversion'),
+
+    preProcess = require('./backend/data/preProcess'),
 
     urlencodedParser = bodyParser.urlencoded({extended: false});
 
@@ -26,23 +25,6 @@ app.get('/', function (req, res) {
 
 app.get('/ncee', function (req, res) {
     res.sendFile(__dirname + '/front/' + 'index_page.html');
-});
-
-app.post('/getCandidates', urlencodedParser, function (req, res) {
-    if (!req.body) {
-        return res.sendStatus(400);
-    }
-    let preferences = {
-        preference1: req.body.preference1,
-        preference2: req.body.preference2,
-        preference3: req.body.preference3
-    };
-
-    mongoInit.getCandidates(preferences, parseInt(req.body.score), parseInt(req.body.floatRange), function (data) {
-        console.log(data.length);
-        res.send(data);
-    });
-    console.log('Get new web page item....');
 });
 
 app.post('/userLogin', urlencodedParser, function (req, res) {
@@ -104,14 +86,9 @@ async function dbMake() {
     // });
 }
 
-async function test(){
-    console.log('Test the backend ... ');
-    // mongooseModel.getConformedData({},null,{});
-}
-
 async function init() {
-    await test();
-    await dbMake();
+    // await dbMake();
+    await preProcess();
 }
 
 init();
