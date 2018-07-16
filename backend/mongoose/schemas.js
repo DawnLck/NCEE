@@ -46,6 +46,12 @@ schemas.finals = new Schema({
 
     schoolIndex: String, /* 院校代号 */
 
+    pastAverageScore: Number, /* 以往平均分 */
+    pastLowestScore: Number, /* 以往最低分 */
+    pastRankingNumber: Number, /* 以往最低名次号 */
+    pastBatch: String, /* 以往批次 */
+    pastAdmissionCount: Number,      /* 以往录取人数 */
+
     past: Object
  // {
  //            year: String, /* 以往平均分 */

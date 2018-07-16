@@ -1,7 +1,25 @@
 /** Data PreProcess
  * */
 const xlsx = require('node-xlsx'),
-    {devsModel, finalsModel} = require('../mongoose');
+    {score2ranksModel, devsModel, finalsModel} = require('../mongoose');
+
+/* 更新一段一分表 */
+async function updateScore2Rank(){
+    let score2rank = xlsx.parse(`${__dirname}/2018/score2rank.xlsx`)[0].data;
+    await score2rank.splice(0,1);
+    await score2ranksModel.remove({}).exec();
+    let length = score2rank.length;
+    for(let i=0;i<length;i++){
+        let doc = new score2ranksModel({
+            /* 分数、小计、累计（名次） */
+            score: score2rank[i][0],
+            subTotal: score2rank[i][1],
+            grandTotal: score2rank[i][2]
+        });
+        doc.save().then(suc=>{console.log('Success ...')},err=>{console.log(err)})
+    }
+    score2rank = null;
+}
 
 /* 整合招生计划与数据表 */
 async function mergePlan() {
@@ -22,7 +40,10 @@ async function mergePlan() {
                 if (doc.subjects === select[0][26]) {
                     continue;
                 } else {
-                    devsModel.update({schoolName: doc_school,professionName: doc_profession },{ $set: {subject: select[0][26], subjectsCode: select[0][25]}}).exec();
+                    devsModel.update({
+                        schoolName: doc_school,
+                        professionName: doc_profession
+                    }, {$set: {subject: select[0][26], subjectsCode: select[0][25]}}).exec();
                 }
             }
 
@@ -37,10 +58,10 @@ async function mergePlan() {
 }
 
 /* 整合往年数据 */
-async function mergePast(){
+async function mergePast() {
     devsModel.find({}).then(docs => {
         console.log('Dev Docs Length: ' + docs.length);
-        for(let i=0;i<docs.length;i++){
+        for (let i = 0; i < docs.length; i++) {
             let doc = docs[i];
             let finalDoc = new finalsModel({
                 itemIndex: doc.itemIndex, /* 序号 */
@@ -72,31 +93,40 @@ async function mergePast(){
 
                 schoolIndex: doc.schoolIndex, /* 院校代号 */
 
+                pastAverageScore: doc.pastAverageScore,     /* 以往平均分 */
+                pastLowestScore: doc.pastLowestScore,       /* 以往最低分 */
+                pastRankingNumber: doc.pastRankingNumber,   /* 以往最低名次号 */
+                pastBatch: doc.pastBatch,                   /* 以往批次 */
+                pastAdmissionCount: doc.pastAdmissionCount, /* 以往录取人数 */
+
                 past: {
                     '2017': {
-                        year: '2017',/* 以往平均分 */
-                        average: doc.pastAverageScore,/* 以往最低分 */
-                        ranking: doc.pastRankingNumber,/* 以往最低名次号 */
-                        batch: doc.pastBatch,/* 以往批次 */
-                        admission: doc.pastAdmissionCount  /* 以往录取人数 */
+                        year: '2017',
+                        average: doc.pastAverageScore,      /* 以往平均分 */
+                        lowest: doc.pastLowestScore,        /* 以往最低分 */
+                        ranking: doc.pastRankingNumber,     /* 以往最低名次号 */
+                        batch: doc.pastBatch,               /* 以往批次 */
+                        admission: doc.pastAdmissionCount   /* 以往录取人数 */
                     }
                 }
             });
 
             finalDoc.save().then(suc => {
                 console.log('Success ... ');
-            }, err =>{
+            }, err => {
                 console.log('Error ...' + err);
             })
         }
-    }, err=>{
+    }, err => {
         console.log(err);
     });
 }
+
 module.exports = async () => {
     console.log('Data process ...');
     /* 已将18年的招生计划的最新专业限制合并到了总表中 */
     /* 已经转换成了final格式 */
+    // await updateScore2Rank();
     // await mergePlan();
     // await mergePast();
 };
