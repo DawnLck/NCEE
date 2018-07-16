@@ -115,10 +115,10 @@ const app = new Vue({
                 {value: 82, text: '澳门特别行政区', alt: '澳门'}
             ],
             provinceSelect: {
-              allArea:["北京", "天津", "河北", "山西", "内蒙古", "辽宁", "吉林", "黑龙江", "上海", "江苏", "浙江", "安徽", "福建", "江西", "山东", "河南", "湖北", "湖南", "广东", "广西", "海南", "重庆", "四川", "贵州", "云南", "西藏", "陕西", "甘肃", "青海", "宁夏", "新疆", "台湾", "香港", "澳门"],
-              jzh: ['江苏', '浙江', '上海'],
-              bsgs:['北京', '上海','广州','深圳'],
-              west:['湖北', '重庆', '四川' ,'湖南']
+                allArea: ["北京", "天津", "河北", "山西", "内蒙古", "辽宁", "吉林", "黑龙江", "上海", "江苏", "浙江", "安徽", "福建", "江西", "山东", "河南", "湖北", "湖南", "广东", "广西", "海南", "重庆", "四川", "贵州", "云南", "西藏", "陕西", "甘肃", "青海", "宁夏", "新疆", "台湾", "香港", "澳门"],
+                jzh: ['江苏', '浙江', '上海'],
+                bsgs: ['北京', '上海', '广州', '深圳'],
+                west: ['湖北', '重庆', '四川', '湖南']
             },
             floatRange: [
                 500,
@@ -223,16 +223,16 @@ const app = new Vue({
             }, 'json');
         },
 
-        autoRecommend: function () {
+        autoRecommendOld: function () {
             // console.log('11111'+this.selectRange.province);
+            if (this.selectRange.score < 359) {
+                window.alert('所选最低分不能低于359分！');
+            }
             if (this.selectRange.province.length < 1) {
                 window.alert('请选择省的区域！');
             } else {
                 this.clearAll();
                 this.autoRe = true;
-                if (this.selectRange.score < 359) {
-                    window.alert('所选最低分不能低于359分！');
-                }
                 console.log('Auto recommend college volunteers...');
 
                 let params = {};
@@ -317,6 +317,75 @@ const app = new Vue({
             }
         },
 
+        autoRecommend: function () {
+            // console.log('11111'+this.selectRange.province);
+            if (this.selectRange.score < 359) {
+                window.alert('所选最低分不能低于359分！');
+            }
+            if (this.selectRange.province.length < 1) {
+                window.alert('请选择省的区域！');
+            } else {
+                this.clearAll();
+                // this.autoRe = true;
+                console.log('Auto recommend college volunteers...');
+
+                let params = {};
+
+                $.extend(true, params, app.$data.selectRange);
+
+                let subjects = [];
+
+                function compare(property) {
+                    return function (a, b) {
+                        let value1 = parseInt(a[property]);
+                        let value2 = parseInt(b[property]);
+                        switch (a['class']) {
+                            case 'preference_1':
+                                value1 -= 400;
+                                break;
+                            case 'preference_2':
+                                value1 -= 200;
+                                break;
+                        }
+                        switch (b['class']) {
+                            case 'preference_1':
+                                value2 -= 400;
+                                break;
+                            case 'preference_2':
+                                value2 -= 200;
+                                break;
+                        }
+                        return value1 - value2;
+                    }
+                }
+
+                $.get('/recommend/getAutoRecommend', params, function (data) {
+                    let classArr = ['preference_1', 'preference_2', 'preference_3'];
+                    let allCount = 0;
+                    let result = [];
+                    for (let x = 0; x < 3; x++) {
+                        for (let i = 0; i < 3; i++) {
+                            let preference = classArr[i];
+                            let preferenceArr = data[x][preference];
+                            let preferenceLength = preferenceArr.length;
+                            allCount += preferenceLength;
+                            for (let j = 0; j < preferenceLength; j++) {
+                                preferenceArr[j].class = preference;
+                                preferenceArr[j].checked = true;
+                            }
+                            result = result.concat(preferenceArr);
+                        }
+                    }
+                    result.sort(compare('past.2017.ranking'));
+                    console.log(result);
+                    console.log(allCount);
+                    app.$data.results = result;
+                    // console.log(app.$data.results);
+                    console.log('Post selected data...ok');
+                }, 'json')
+            }
+        },
+
         checkCandidate: function (item) {
             if (item.checked === true) {
                 // console.log(item);
@@ -388,14 +457,14 @@ const app = new Vue({
                     console.log(data.rank);
                     app.$data.selectRange.ranking = parseInt(data.rank);
                 })
-            }else{
+            } else {
                 this.selectRange.ranking = 0;
             }
         },
 
         provinceSelect: function (value) {
             let select = this.options.provinceSelect;
-            switch(value){
+            switch (value) {
                 case 0:
                     this.selectRange.province = select.allArea;
                     break;

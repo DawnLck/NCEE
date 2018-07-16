@@ -214,16 +214,16 @@
                     <tbody style="display:block; height: 600px;overflow: auto;">
                     <tr v-for="(item ,index) in results" v-bind:class="item.class">
                         <td class="col" v-text="(index+1)"></td>
-                        <td class="col" v-text="item.schoolName"></td>
-                        <td class="col" v-text="item.professionName"></td>
+                        <td class="col table-tr-fontsize" v-text="item.schoolName"></td>
+                        <td class="col table-tr-fontsize" v-text="item.professionName"></td>
                         <td class="col" v-text="item.professionCategory"></td>
                         <td class="col" v-text="item.province"></td>
 
                         <td class="col" v-text="item.plansNum"></td>
                         <td class="col" v-text="item.schoolLevel"></td>
 
-                        <td class="col" v-text="item.pastBatch"></td>
-                        <td class="col" v-text="parseInt(item.pastRankingNumber)"></td>
+                        <td class="col" v-text="item.past[2017].batch"></td>
+                        <td class="col" v-text="parseInt(item.past[2017].ranking)"></td>
 
                         <td class="col">
                             <span class="fa fa-arrow-up btn btn-default"
@@ -233,7 +233,7 @@
                                   :disabled="index === (results.length-1)"></span>
                             <!--<span class="glyphicon glyphicon-collapse-up btn btn-default" aria-hidden="true"></span>-->
                         </td>
-                        <td class="col-lg-1">
+                        <td class="col">
                             <div class="checkbox">
                                 <label><input type="checkbox" @change="deleteCheckedCandidate(index, item)"
                                               v-model=item.checked></label>

@@ -1,24 +1,17 @@
 /* Recommend route */
 
 const express = require('express'),
-    mongoInit = require('../init/mongoInit'),
+    interaction = require('../data/interaction'),
     router = express.Router();
 
 /* AI推荐 */
-router.get('/getAutoRecommend', function (req, res) {
+router.get('/getAutoRecommend',async function (req, res) {
     console.log("GET : Get Auto Recommend .....");
     // console.log(req.query);
 
-    mongoInit.getAutoRecommend(req.query, function (err, data) {
-        if (err) {
-            console.log(err);
-            res.send(err);
-        }
-        else {
-            console.log('\nServer: get auto recommend items.');
-            res.send(data);
-        }
-    });
+    let result = await interaction.getAutoRecommend(req.query);
+
+    res.send(result);
 });
 
 /* 人工推荐 */

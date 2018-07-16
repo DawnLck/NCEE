@@ -55,39 +55,7 @@ let server = app.listen(3001, function () {
     console.log('Example app listening at http://%s:%s', host, port);
 });
 
-async function dbMake() {
-    console.log('DB Make ... ');
-
-    // mongoInit.readScore2RankExcel('backend/data/' + config.currentYear + '/score2rank.xlsx', 'score2ranks', function (data) {
-    //     console.log(data);
-    // });
-
-    // mongoInit.readSchoolsExcel('backend/data/schools.xlsx', 'schools', function (data) {
-    //     console.log(data);
-    // });
-    // mongoInit.readAdmissionExcel('test.xlsx', 'admissions', function (data) {
-    //     console.log(data);
-    // });
-    // mongoInit.readPlans2017('backend/data/plans_2017.xlsx', 'plans_2017', function (data) {
-    //     console.log(data);
-    // });
-    // mongoInit.conformDataAsync();
-    // mongoInit.readConformedData('backend/data/plans_conformed_final_2017.xlsx', 'plans_conformed_2017', function (data) {
-    //     console.log(data);
-    // });
-    // mongoInit.filterData_2ndBatchAsync('backend/data/2017_2nd_Merged.xlsx', 'plans_conformed_2017', function (data) {
-    //     console.log(data);
-    // });
-    // mongoInit.readConformedData('backend/data/2017_2nd_merged_p.xlsx', 'plans_2nd_conformed_2017', function (data) {
-    //     console.log(data);
-    // });
-    // mongoInit.readConformedData('backend/data/2017/ncee_2017.xlsx', 'ncee_2017', function (data) {
-    //     console.log(data);
-    // });
-}
-
 async function init() {
-    // await dbMake();
     await preProcess();
 }
 

@@ -72,19 +72,19 @@ async function mergePast(){
 
                 schoolIndex: doc.schoolIndex, /* 院校代号 */
 
-                past: [
-                    {
+                past: {
+                    '2017': {
                         year: '2017',/* 以往平均分 */
                         average: doc.pastAverageScore,/* 以往最低分 */
                         ranking: doc.pastRankingNumber,/* 以往最低名次号 */
                         batch: doc.pastBatch,/* 以往批次 */
                         admission: doc.pastAdmissionCount  /* 以往录取人数 */
                     }
-                ]
+                }
             });
 
             finalDoc.save().then(suc => {
-                console.log('Success ... ' + suc);
+                console.log('Success ... ');
             }, err =>{
                 console.log('Error ...' + err);
             })
@@ -93,7 +93,7 @@ async function mergePast(){
         console.log(err);
     });
 }
-module.exports = async function () {
+module.exports = async () => {
     console.log('Data process ...');
     /* 已将18年的招生计划的最新专业限制合并到了总表中 */
     /* 已经转换成了final格式 */

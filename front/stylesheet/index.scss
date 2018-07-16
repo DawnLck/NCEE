@@ -36,6 +36,35 @@ $color_auto_3: #C6EDEA;
   .preference_1 {
     background-color: $color_auto_1;
   }
+
+  .table-tr-fontsize{
+    font-size: 0.6rem;
+    line-height: 1rem;
+  }
+  .table > tbody > tr > td {
+    vertical-align: middle;
+    height: 60px;
+    padding-top: 20px;
+    overflow: hidden;
+    /*line-height: 3;*/
+  }
+
+  .table {
+    thead tr {
+      display: flex;
+    }
+    .checkbox {
+      margin: 0;
+    }
+    .btn {
+      top: -8px;
+      padding: 0.4em 0.4em;
+    }
+  }
+
+  .table > tbody > tr {
+    display: flex;
+  }
 }
 
 #ncee-preferences {
@@ -55,31 +84,6 @@ $color_auto_3: #C6EDEA;
   li{
     white-space: nowrap;
   }
-}
-
-.table > tbody > tr > td {
-  vertical-align: middle;
-  height: 60px;
-  padding-top: 20px;
-  overflow: hidden;
-  /*line-height: 3;*/
-}
-
-.table {
-  thead tr {
-    display: flex;
-  }
-  .checkbox {
-    margin: 0;
-  }
-  .btn {
-    top: -8px;
-    padding: 0.4em 0.4em;
-  }
-}
-
-.table > tbody > tr {
-  display: flex;
 }
 
 #ncee-login {

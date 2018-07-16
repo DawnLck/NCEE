@@ -17,6 +17,24 @@
   background-color: #B0D9EF; }
 #ncee-resultList .preference_1 {
   background-color: #5CA7BC; }
+#ncee-resultList .table-tr-fontsize {
+  font-size: 0.6rem;
+  line-height: 1rem; }
+#ncee-resultList .table > tbody > tr > td {
+  vertical-align: middle;
+  height: 60px;
+  padding-top: 20px;
+  overflow: hidden;
+  /*line-height: 3;*/ }
+#ncee-resultList .table thead tr {
+  display: flex; }
+#ncee-resultList .table .checkbox {
+  margin: 0; }
+#ncee-resultList .table .btn {
+  top: -8px;
+  padding: 0.4em 0.4em; }
+#ncee-resultList .table > tbody > tr {
+  display: flex; }
 
 #ncee-preferences .col-4 {
   padding: 0;
@@ -27,24 +45,6 @@
 
 .select-result li {
   white-space: nowrap; }
-
-.table > tbody > tr > td {
-  vertical-align: middle;
-  height: 60px;
-  padding-top: 20px;
-  overflow: hidden;
-  /*line-height: 3;*/ }
-
-.table thead tr {
-  display: flex; }
-.table .checkbox {
-  margin: 0; }
-.table .btn {
-  top: -8px;
-  padding: 0.4em 0.4em; }
-
-.table > tbody > tr {
-  display: flex; }
 
 #ncee-login {
   display: inline-block;
